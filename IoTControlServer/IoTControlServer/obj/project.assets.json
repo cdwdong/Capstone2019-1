@@ -694,11 +694,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\cdwdo\\source\\repos\\IoTControlServer\\IoTControlServer\\IoTControlServer.csproj",
+      "projectUniqueName": "C:\\Users\\cdwdo\\Documents\\GitHub\\Capstone2019-1\\IoTControlServer\\IoTControlServer\\IoTControlServer.csproj",
       "projectName": "IoTControlServer",
-      "projectPath": "C:\\Users\\cdwdo\\source\\repos\\IoTControlServer\\IoTControlServer\\IoTControlServer.csproj",
+      "projectPath": "C:\\Users\\cdwdo\\Documents\\GitHub\\Capstone2019-1\\IoTControlServer\\IoTControlServer\\IoTControlServer.csproj",
       "packagesPath": "C:\\Users\\cdwdo\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\cdwdo\\source\\repos\\IoTControlServer\\IoTControlServer\\obj\\",
+      "outputPath": "C:\\Users\\cdwdo\\Documents\\GitHub\\Capstone2019-1\\IoTControlServer\\IoTControlServer\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

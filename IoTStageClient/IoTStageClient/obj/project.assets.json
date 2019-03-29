@@ -694,11 +694,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\cdwdo\\source\\repos\\IoTStageClient\\IoTStageClient\\IoTStageClient.csproj",
+      "projectUniqueName": "C:\\Users\\cdwdo\\Documents\\GitHub\\Capstone2019-1\\IoTStageClient\\IoTStageClient\\IoTStageClient.csproj",
       "projectName": "IoTStageClient",
-      "projectPath": "C:\\Users\\cdwdo\\source\\repos\\IoTStageClient\\IoTStageClient\\IoTStageClient.csproj",
+      "projectPath": "C:\\Users\\cdwdo\\Documents\\GitHub\\Capstone2019-1\\IoTStageClient\\IoTStageClient\\IoTStageClient.csproj",
       "packagesPath": "C:\\Users\\cdwdo\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\cdwdo\\source\\repos\\IoTStageClient\\IoTStageClient\\obj\\",
+      "outputPath": "C:\\Users\\cdwdo\\Documents\\GitHub\\Capstone2019-1\\IoTStageClient\\IoTStageClient\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
