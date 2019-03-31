@@ -1,0 +1,23 @@
+<ItemGroup>
+  <Reference Include="Unosquare.Raspberry.Abstractions">
+    <HintPath>path\.\Unosquare.Raspberry.Abstractions.dll</HintPath>
+  </Reference>
+  
+  <Reference Include="Unosquare.Raspberry.Abstractions">
+    <HintPath>path\.\Unosquare.Raspberry.Abstractions.dll</HintPath>
+  </Reference>
+  
+  
+  <Reference Include="Unosquare.RaspberryIO">
+    <HintPath>path\.\Unosquare.RaspberryIO.dll</HintPath>
+  </Reference>
+  
+  
+  <Reference Include="Unosquare.RaspberryIO.Peripherals">
+    <HintPath>path\.\Unosquare.RaspberryIO.Peripherals.dll</HintPath>
+  </Reference>
+  
+  <Reference Include="Unosquare.RaspberryIO.Playground">
+    <HintPath>path\.\Unosquare.RaspberryIO.Playground.dll</HintPath>
+  </Reference>
+</ItemGroup>
