@@ -1,9 +1,14 @@
-#ifndef Jimin_Things_h
-#define Jimin_Things_h
+/*
+2019-05-04
 
-//미세먼지 센서
+싸그리 포함하는 마지막 계측
+
+
+작성자: 서지민
+*/
+
+//센서
 #include "Dust_Sensor.h"
 
-//통신모듈
 
-#endif
+//여기에 통신모듈

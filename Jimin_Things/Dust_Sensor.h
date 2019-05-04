@@ -22,7 +22,7 @@ public:
 	float Vo_value = 0;
 	float Voltage = 0;
 	float dustDensity = 0;
-	float dustCleanVoltage = 0.58; //초기값으로 보정요구 
+	float dustCleanVoltage = 0.63; //초기값으로 보정요구 
 
 	int samplingTime = 280;
 	int deltaTime = 40;

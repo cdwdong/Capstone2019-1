@@ -103,5 +103,5 @@ void Dust_Sensor::Main_Logic()
 	PrintSerial();
 	PrintLCD();
 
-	delay(500);
+	delay(200);
 }
