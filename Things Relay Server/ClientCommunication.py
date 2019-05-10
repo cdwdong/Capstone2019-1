@@ -2,9 +2,9 @@ import sys
 import asyncio
 from CommuHandler import ClientHandler
 
-async def tcp_echo_client(message):
+async def tcp_echo_client(ip, port, message):
     reader, writer = await asyncio.open_connection(
-        '127.0.0.1', 8888)
+        ip, port)
 
     print(f'Send: {message!r}')
     writer.write(message.encode())
