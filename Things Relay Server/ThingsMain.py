@@ -27,15 +27,15 @@ class ThingsMain():
         
 
     def Serial_Read_after_Trans_Server(self):
-        arduino = serial.ThingsSerial("/dev/ttyUSB0", 9600)
-
+        #arduino = serial.ThingsSerial("/dev/ttyUSB0", 9600) Raspberry
+        arduino = serial.ThingsSerial("COM4", 9600) #Windows
         handle = ClientHandler(self.ip, self.port)
      
         while True:
-             message = arduino.Serial_readline();
+            message = arduino.Serial_readline();
 
             if message:
-                asyncio.run(tcp.tcp_echo_client(self.ip, self.port, message))
+                asyncio.run(tcp.tcp_echo_client(self.ip, self.port, message.decode("utf-8")))
             
             
 begin = ThingsMain()

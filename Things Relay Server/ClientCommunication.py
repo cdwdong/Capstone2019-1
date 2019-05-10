@@ -32,6 +32,8 @@ async def tcp_echo_client2(reader, writer):
     print('Close the connection')
     writer.close()
 
+"""
+
 ip = "52.78.166.156"
 port = 22
 handle = ClientHandler("52.78.166.156", 22)
@@ -43,3 +45,4 @@ while True:
 
     if message:
         asyncio.run(tcp_echo_client(ip, port, message.decode("utf-8")))
+"""
