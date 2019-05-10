@@ -1,10 +1,16 @@
 ﻿#ifndef Dust_Sensor_h
 #define Dust_Sensor_h
 
+#include <stdio.h>
+#include <time.h>
+
 
 #include <Arduino.h>
 #include <LiquidCrystal.h> 
 
+#include "ArduinoJson.h"
+
+using namespace std;
 // initialize the library with the numbers of the interface pins
 
 class Dust_Sensor
@@ -39,6 +45,9 @@ public:
 	void PrintLCD();
 
 	void Main_Logic();
+
+private:
+	tm currentDateTime();
 
 };
 
