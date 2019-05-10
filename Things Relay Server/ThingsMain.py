@@ -11,24 +11,33 @@ CommuHandler
 """
 
 import ThingsInfo
-import ThingsSerial
+import ThingsSerial as serial
 import CommuHandler
 import asyncio
 from CommuHandler import ClientHandler
+import ClientCommunication as tcp
 
-
-class ThingsMain(ThingsInfo, ThingsSerial, CommuHandler):
+class ThingsMain():
+    
+    ip = "52.78.166.156"
+    port = 22
+    
+    def __init__(self):
+        pass
+        
 
     def Serial_Read_after_Trans_Server(self):
+        arduino = serial.ThingsSerial("/dev/ttyUSB0", 9600)
 
-
-        arduino = ThingsSerial("/dev/ttyUSB0", 9600);
-
-        ip = "52.78.166.156"
-        port = 22
-
+        handle = ClientHandler(self.ip, self.port)
+     
         while True:
-            message = arduino.Serial_readline();
+             message = arduino.Serial_readline();
 
-            asyncio.run(ClientHandler.tcp_echo_client(ip, port, message))
+            if message:
+                asyncio.run(tcp.tcp_echo_client(self.ip, self.port, message))
+            
+            
+begin = ThingsMain()
+begin.Serial_Read_after_Trans_Server()
 

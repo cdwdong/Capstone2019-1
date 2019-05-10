@@ -11,7 +11,7 @@ import serial
 
 class ThingsSerial:
 
-    port_number = "COM4"
+    port_number = "/dev/ttyUSB0"
     baudrate = 9600
 
     things_serial = 0
@@ -30,11 +30,13 @@ class ThingsSerial:
         return res
 
     # 시리얼 객체를 받아서 지속적으로 출력
+    """
     def serial_read(self):
         while True:
             res = self.Serial_readline()
             print(res.decode()[:len(res) - 1])
+    """
 
 
-#begin = ThingsSerial("COM4", 9600);
+#begin = ThingsSerial("/dev/ttyUSB0", 9600);
 #begin.serial_read()
