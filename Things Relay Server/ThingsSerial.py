@@ -23,14 +23,18 @@ class ThingsSerial:
 
         self.things_serial = serial.Serial(port_number, baudrate)
 
+
+    def Serial_readline(self):
+        if self.things_serial.readable():
+            res = self.things_serial.readline()
+        return res
+
     # 시리얼 객체를 받아서 지속적으로 출력
     def serial_read(self):
-
         while True:
-            if self.things_serial.readable():
-                res = self.things_serial.readline()
-                print(res.decode()[:len(res) - 1])
+            res = self.Serial_readline()
+            print(res.decode()[:len(res) - 1])
 
 
-begin = ThingsSerial("COM4", 9600);
-begin.serial_read()
+#begin = ThingsSerial("COM4", 9600);
+#begin.serial_read()

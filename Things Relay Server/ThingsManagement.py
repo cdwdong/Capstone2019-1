@@ -6,9 +6,9 @@
 작성자: 서지민
 
 """
+import ThingsMain
 
-
-class ThingsMangement:
+class ThingsMangement(ThingsMain):
 
     #사전
     things_list = {}
@@ -18,7 +18,7 @@ class ThingsMangement:
     def __init__(self, things_pointer):
         self.things_pointer = things_pointer
 
-    # 장치 등록 ThingsInfo 객체를 추가하기
+    # 장치 등록 ThingsMain 객체를 추가하기
     def add_things(self, key, source):
         self.things_list.__setitem__(key, source)
         self.things_pointer = self.things_pointer + 1
