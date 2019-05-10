@@ -71,15 +71,7 @@ void Dust_Sensor::Computing_dust()
 
 void Dust_Sensor::PrintSerial()
 {
-	Serial.print(" Raw Signal Value (0-1023):");
-	Serial.print(Vo_value);
-	Serial.print(" | Volatage:");
-	Serial.print(Voltage);
-	Serial.print(" | Dust Density:");
 	Serial.print(dustDensity);
-	Serial.print("[ug/m3]");
-	Serial.println();
-	Serial.println();
 	Serial.println();
 }
 
@@ -102,6 +94,4 @@ void Dust_Sensor::Main_Logic()
 	Computing_Mean();
 	PrintSerial();
 	PrintLCD();
-
-	delay(200);
 }

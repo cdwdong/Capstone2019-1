@@ -14,7 +14,7 @@ public:
 	//LiquidCrystal lcd;
 
 	int error;
-	int Meansuring_Times = 50;
+	int Meansuring_Times = 10;
 
 	int Vo = A0;
 	int V_LED = 8;
