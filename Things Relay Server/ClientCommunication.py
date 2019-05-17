@@ -17,7 +17,7 @@ async def tcp_echo_client(ip, port, message):
 
     print('Close the connection')
     writer.close()
-'''
+
 
 #asyncio.run(tcp_echo_client('Hello World!'))
 async def tcp_echo_client2(reader, writer):
@@ -31,14 +31,20 @@ async def tcp_echo_client2(reader, writer):
 
     print('Close the connection')
     writer.close()
-
+'''
 async def callbackTest(reader, writer):
 
-    arduino = serial.ThingsSerial("/dev/ttyUSB0", 9600)
+    arduino = serial.ThingsSerial("COM11", 9600)
 
     while True:
         message = arduino.Serial_readline()
-        writer.write(message.encode())
+        #writer.write(message.encode("utf-8"))
+        pmsg = str(message)
+        print(pmsg)
+        if (pmsg).strip() is not None:
+            writer.write(pmsg.encode())
+            rdata = await reader.read(100)
+            print(f'서버에게 받았음: {rdata.decode()!r}')
 
 ##############################################################
 ip = "52.78.166.156"
