@@ -71,47 +71,7 @@ void Dust_Sensor::Computing_dust()
 
 void Dust_Sensor::PrintSerial()
 {
-	StaticJsonDocument<200> doc;
-
-	// StaticJsonObject allocates memory on the stack, it can be
-	// replaced by DynamicJsonDocument which allocates in the heap.
-	//
-	// DynamicJsonDocument  doc(200);
-
-	// Add values in the document
-	//
-	doc["sensor"] = "GP2Y1014AU0F";
-	doc["date"] = "";
-
-	// Add an array.
-	//
-	JsonArray data = doc.createNestedArray("data");
-	data.add( dustDensity );
-
-	// Generate the minified JSON and send it to the Serial port.
-	//
-	serializeJson(doc, Serial);
-	// The above line prints:
-	// {"sensor":"gps","time":1351824120,"data":[48.756080,2.302038]}
-
-	// Start a new line
-	Serial.println();
-
-	// Generate the prettified JSON and send it to the Serial port.
-	//
-	serializeJsonPretty(doc, Serial);
-	// The above line prints:
-	// {
-	//   "sensor": "gps",
-	//   "time": 1351824120,
-	//   "data": [
-	//     48.756080,
-	//     2.302038
-	//   ]
-	// }
-
-	//Serial.print(dustDensity);
-	//Serial.println(jsondata);
+	Serial.println(dustDensity);
 }
 
 void Dust_Sensor::PrintLCD()

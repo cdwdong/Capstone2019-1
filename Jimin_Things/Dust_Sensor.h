@@ -8,8 +8,6 @@
 #include <Arduino.h>
 #include <LiquidCrystal.h> 
 
-#include "ArduinoJson.h"
-
 using namespace std;
 // initialize the library with the numbers of the interface pins
 
@@ -30,9 +28,9 @@ public:
 	float dustDensity = 0;
 	float dustCleanVoltage = 0.63; //초기값으로 보정요구 
 
-	int samplingTime = 280;
-	int deltaTime = 40;
-	int sleepTime = 9680;
+	const int samplingTime = 280;
+	const int deltaTime = 40;
+	const int sleepTime = 9680;
 
 	void Init();
 

@@ -10,5 +10,7 @@
 //센서
 #include "Dust_Sensor.h"
 
+#include "Fan_Things.h"
+
 
 //여기에 통신모듈
