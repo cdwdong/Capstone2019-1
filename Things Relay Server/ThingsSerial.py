@@ -6,15 +6,23 @@
 작성자: 서지민
 
 """
-
+import ThingsInfo
 import serial
 
-class ThingsSerial:
+class ThingsSerial(ThingsInfo):
 
-    port_number = "/dev/ttyUSB0"
+    #port_number = "/dev/ttyUSB0" #linux
+    port_number = "COM4"  #windows
     baudrate = 9600
 
+    #시리얼 객체
     things_serial = 0
+
+    #Que buffer
+    Que_buffer = {}
+
+    #buffer pointer
+    buffer_pointer = 0;
 
     # 시리얼 객체를 생성
     def __init__(self, port_number, baudrate):
@@ -23,20 +31,12 @@ class ThingsSerial:
 
         self.things_serial = serial.Serial(port_number, baudrate)
 
-
-    def Serial_readline(self):
+    def serial_readline(self):
         if self.things_serial.readable():
             res = self.things_serial.readline()
+            self.Que_buffer.append(res)
+            self.buffer_pointer = self.buffer_pointer + 1
         return res
-
-    # 시리얼 객체를 받아서 지속적으로 출력
-    """
-    def serial_read(self):
-        while True:
-            res = self.Serial_readline()
-            print(res.decode()[:len(res) - 1])
-    """
-
 
 #begin = ThingsSerial("/dev/ttyUSB0", 9600);
 #begin.serial_read()

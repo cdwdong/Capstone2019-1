@@ -16,9 +16,8 @@ Things들의 최상위 클래스
 class ThingsInfo:
 
     id = 0
+    data = ""
     name = "Arduino DustSensor"
-    port_number = 'COM4'
-    baudrate = 9600
     category = "Arduino"
     upper_category = "Things" # null이면 이것이 바로 최상위 카테고리
 
