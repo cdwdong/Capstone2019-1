@@ -5,7 +5,7 @@ import os
 def openCode():
     with open("./test/code.txt") as f:
         return f.read()
-    return -1
+
 async def EventHandle(reader, writer):
     code = openCode()
     if code == -1:
@@ -16,8 +16,13 @@ async def EventHandle(reader, writer):
     mysize = mystat.st_size
     print("mysize :", mysize)
 
-    await writer.write(str(mysize).encode())
-    await writer.write(code.encode())
+    writer.write(str(mysize).encode())
+    writer.write_eof()
+    await writer.drain()
+    writer.write(code.encode())
+    await writer.drain()
+    writer.close()
+    await writer.wait_closed()
 
-client = CommuHandler.ClientHandler('127.0.0.1', 8888)
+client = CommuHandler.ClientHandler('52.78.166.156', 8888)
 asyncio.run(client.start(EventHandle))
