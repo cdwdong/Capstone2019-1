@@ -10,6 +10,7 @@ async def EventHandle(reader, writer):
     code = openCode()
     if code == -1:
         return
+    '''
     mystat = os.stat("./test/code.txt")
     print("mystat :", mystat)
 
@@ -17,8 +18,9 @@ async def EventHandle(reader, writer):
     print("mysize :", mysize)
 
     writer.write(str(mysize).encode())
-    writer.write_eof()
     await writer.drain()
+    '''
+
     writer.write(code.encode())
     await writer.drain()
     writer.close()

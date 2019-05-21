@@ -6,11 +6,10 @@ def executeCode(code):
     exec(code_obj)
 
 async def eventHandle(reader, writer):
-    length = await reader.read()
-    code = await reader.read(int(length.decode()) + 1)
+    code = await reader.read()
     executeCode(code.decode())
     writer.close()
     await writer.wait_closed()
 
-server = CommuHandler.ServerHandler('52.78.166.156', 8888)
+server = CommuHandler.ServerHandler('172.26.2.32', 8888)
 asyncio.run(server.start(eventHandle))
