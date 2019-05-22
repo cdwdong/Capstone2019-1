@@ -37,6 +37,10 @@ class ThingsSerial():
             #self.Que_buffer.append(res)
             self.buffer_pointer = self.buffer_pointer + 1
         return res
+    
+    
+    def serial_writeline(self,pwm):
+        self.things_serial.write( str(pwm).encode("utf-8"))
 
 
 begin = ThingsSerial("COM11", 9600)
