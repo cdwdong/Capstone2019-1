@@ -9,43 +9,53 @@
 작성자: 서지민
 
 """
-import ThingsSerial
-import asyncio
-from CommuHandler import ClientHandler
+import ThingsSerial as ts
 
-class ThingsMangement(ThingsSerial):
+
+class ThingsMangement(ts.ThingsSerial):
     #사전
-    things_list = {}
+    things_list = []
     things_pointer = 0
-    tcp_flag = 0 #상태전이를 위한 변수
 
     # 생성자
-    def __init__(self, things_pointer):
-        self.things_pointer = things_pointer
+    def __init__(self):
+        pass
 
     # 장치 등록 ThingsMain 객체를 추가하기
-    def add_things(self, key, source):
-        self.things_list.__setitem__(key, source)
+    def add_things(self, source):
+        self.things_list.append(source)
         self.things_pointer = self.things_pointer + 1
 
     # 해당 장치 시리얼 읽기 그리고 라운드 로빈 스케줄링
     def serial_scheduling(self):
-        for things in self.things_list:
-            things.serial_readline()
+        while True:
+            for things in self.things_list:
 
-    #타이밍 5개 함수
-    #함수 끝날 때, 다음 상태로 전이하기 위하여 flag값 변경하기
+                data = things.serial_readline()
+
+                if data:
+                    print("things ID: ", things.id)
+                    print("things Name: ", things.name)
+                    print("things Category: ", things.category)
+                    print("things Upper_Category: ", things.upper_category)
+                    print("things COM: ", things.port_number)
+                    print("things baudrate: ", things.baudrate)
+                    print("things Data: ", data)
+
+    # 특정 장치에 대하여 값 보내기
+    def serial_write(self, things_number, data):
+        self.things_list[things_number].serial_readline(data)
   
 ######################          클래스 끝          #########################################
 
-things = ThingsMangement()
 
+#테스트 예제코드
+"""
+dust_sensor = ts.ThingsSerial(0, "arduino dust_sensor", 2, 1, "COM4", 9600) # 실험용 Things 하나 생성
 
+manager = ThingsMangement(); # 관리하는 객체 생성
 
+manager.add_things(dust_sensor) # 관리하는 객체에다 Things 넣기
 
-
-######################          이제 시작          #########################################
-
-ip = "52.78.166.156"
-port = 22
-
+manager.serial_scheduling() # 데이터 수집 시작
+"""
