@@ -22,7 +22,7 @@ class Fan_Things
 {
 public:
 	const int fan_pwm_port = 3;
-	int pwn = 4;
+	int pwm_value = 4;
 
 	Fan_Things();
 	void Init();

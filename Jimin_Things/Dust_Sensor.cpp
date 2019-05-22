@@ -72,6 +72,7 @@ void Dust_Sensor::Computing_dust()
 void Dust_Sensor::PrintSerial()
 {
 	Serial.println(dustDensity);
+	//Serial.print(dustDensity);
 }
 
 void Dust_Sensor::PrintLCD()
