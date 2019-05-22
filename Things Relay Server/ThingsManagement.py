@@ -35,53 +35,17 @@ class ThingsMangement(ThingsSerial):
 
     #타이밍 5개 함수
     #함수 끝날 때, 다음 상태로 전이하기 위하여 flag값 변경하기
-    def tcp_1(self):
-        pass
-
-    def tcp_2(self):
-        pass
-
-    def tcp_3(self):
-        pass
-
-    def tcp_4(self):
-        pass
-
-    def tcp_5(self):
-        pass
-
-
+  
 ######################          클래스 끝          #########################################
 
 things = ThingsMangement()
 
 
-def add_things():
-    pass
 
-
-async def tcp_main(reader, writer):
-    while True:
-        #타이밍 5개 함수
-        if things.tcp_flag is 1:
-            things.tcp_1()
-
-        elif things.tcp_flag is 2:
-            things.tcp_2()
-
-        elif things.tcp_flag is 3:
-            things.tcp_3()
-
-        elif things.tcp_flag is 4:
-            things.tcp_4()
-
-        elif things.tcp_flag is 5:
-            things.tcp_5()
 
 
 ######################          이제 시작          #########################################
 
 ip = "52.78.166.156"
 port = 22
-handle = ClientHandler(ip, port)
-asyncio.run(handle.start(tcp_main))
+
