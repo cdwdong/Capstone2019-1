@@ -1,4 +1,4 @@
-import CommuHandler
+from lib.CommuHandler import CommuHandler
 import asyncio
 import os
 

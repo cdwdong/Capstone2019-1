@@ -1,10 +1,13 @@
+import ThingsInfo
+import ThingsSerial as serial
+
 import sys
 import asyncio
 from CommuHandler import ClientHandler
-
-async def tcp_echo_client(message):
+'''
+async def tcp_echo_client(ip, port, message):
     reader, writer = await asyncio.open_connection(
-        '127.0.0.1', 8888)
+        ip, port)
 
     print(f'Send: {message!r}')
     writer.write(message.encode())
@@ -18,7 +21,7 @@ async def tcp_echo_client(message):
 
 #asyncio.run(tcp_echo_client('Hello World!'))
 async def tcp_echo_client2(reader, writer):
-    message = '안녕 복스'
+    message = 'This is Test, jimin'
 
     print(f'Send: {message!r}')
     writer.write(message.encode())
@@ -28,6 +31,23 @@ async def tcp_echo_client2(reader, writer):
 
     print('Close the connection')
     writer.close()
+'''
+async def callbackTest(reader, writer):
 
-handle = ClientHandler(str(sys.argv[1]), int(sys.argv[2]))
-asyncio.run(handle.start(tcp_echo_client2))
+    arduino = serial.ThingsSerial("COM11", 9600)
+
+    while True:
+        message = arduino.Serial_readline()
+        #writer.write(message.encode("utf-8"))
+        pmsg = str(message)
+        print(pmsg)
+        if (pmsg).strip() is not None:
+            writer.write(pmsg.encode())
+            rdata = await reader.read(100)
+            print(f'서버에게 받았음: {rdata.decode()!r}')
+
+##############################################################
+ip = "52.78.166.156"
+port = 8888
+handle = ClientHandler(ip, port)
+asyncio.run(handle.start(callbackTest))

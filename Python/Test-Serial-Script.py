@@ -6,7 +6,7 @@
 작성자: 서지민
 
 """
-import ThingsInfo
+from lib.ThingsInfo import ThingsInfo
 import serial
 
 class ThingsSerial():
