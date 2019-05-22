@@ -13,10 +13,11 @@ Things들의 최상위 클래스
 
 # 센서값이 라즈베리로 오는 과정
 # (Raspberry <- Bluetooth) <- (Bluetooth <- Arduino <- DustSensor)
+
+
 class ThingsInfo:
 
     id = 0
-    data = ""
     name = "Arduino DustSensor"
     category = "Arduino"
     upper_category = "Things" # null이면 이것이 바로 최상위 카테고리
