@@ -23,6 +23,7 @@ class Fan_Things
 public:
 	const int fan_pwm_port = 3;
 	int pwm_value = 4;
+	bool ACK = false;
 
 	Fan_Things();
 	void Init();
