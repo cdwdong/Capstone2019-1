@@ -9,7 +9,7 @@
 작성자: 서지민
 
 """
-import ThingsSerial as ts
+from test import ThingsSerial as ts
 
 
 class ThingsMangement(ts.ThingsSerial):

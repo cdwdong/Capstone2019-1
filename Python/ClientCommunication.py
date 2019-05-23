@@ -1,7 +1,5 @@
-import ThingsInfo
-import ThingsSerial as serial
+from test import ThingsSerial as serial
 
-import sys
 import asyncio
 from CommuHandler import ClientHandler
 '''

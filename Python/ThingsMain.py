@@ -10,12 +10,10 @@ CommuHandler
 
 """
 
-import ThingsInfo
-import ThingsSerial as serial
-import CommuHandler
 import asyncio
 from CommuHandler import ClientHandler
-import ClientCommunication as tcp
+from test import ClientCommunication as tcp, ThingsSerial as serial
+
 
 class ThingsMain():
     
