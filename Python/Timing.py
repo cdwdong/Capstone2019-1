@@ -1,7 +1,8 @@
 import enum
 
 class Timing(enum.Enum):
-    SEND_ID = 0
-    SEND_CODE = 1
-    SEND_DATA = 2
-    DEFAULT = 3
+    DEFAULT = 0
+    SEND_ID = 1
+    SEND_CODE = 2
+    SEND_DATA = 3
+
