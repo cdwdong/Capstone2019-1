@@ -16,7 +16,7 @@ class Dust_Sensor
 public:
 	//LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
 	//LiquidCrystal lcd;
-
+	bool ACK = false;
 	int error;
 	int Meansuring_Times = 10;
 
