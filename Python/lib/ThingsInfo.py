@@ -22,8 +22,12 @@ class ThingsInfo:
     category = "Arduino"
     upper_category = "Things" # null이면 이것이 바로 최상위 카테고리
 
-    def __init__(self, id, name, category, upper_category):
+    def __init__(self, id):
         self.id = id
+
+        """
         self.name = name
         self.category = category
         self.upper_category = upper_category
+        """
+
