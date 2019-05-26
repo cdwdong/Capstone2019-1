@@ -15,16 +15,26 @@ import glob
 import serial
 from datetime import datetime
 
-#통신용 전역변수
+# 통신용 전역변수
 sensor_data_list = []
 things_pointer = 0
-message_flag = 3 #추후 변경 일단 암거나함
+
+# 추후 변경 일단 암거나함
+message_flag = 3
+
+# 역치값
+Threshole = 25.0
+
 
 class ThingsMangement(ts.ThingsSerial):
     # 사전
     things_pointer = 0
     things_list = []
     sensor_data_list = []
+
+    sensing_data_list = []
+    sensing_pointer = 0
+
 
     # 생성자 장치들 파악 후 등록
     def __init__(self):
@@ -51,13 +61,33 @@ class ThingsMangement(ts.ThingsSerial):
             print("things baudrate: ", things.baudrate)
             print("things Data: ", data)
 
+            self.sensing_data_list.append(data)
+
             ######################### 여기서 최종적으로 버퍼에다 데이터 쓰기
             message = str(message_flag) + "," + date + "," + str(things.id) + "," + "data"
             sensor_data_list.append(message)
 
+            self.sensing_pointer = self.sensing_pointer + 1
+
     #상황처리테이블에 따라 팬속도 조절 동적/정적 가능
     def fan_scheduling(self,things):
         # serial_write(things_number, pwm 속도):
+        size = len(self.sensing_data_list)
+
+        data = -1
+
+        if size > 0:
+            data = self.sensing_data_list[size-1]
+            print("raw data > ", data)
+            # print("type >", type(data))
+            data = data.strip()
+            data = float(data)
+            data = round(data)
+            data = int(data)
+
+        if data > Threshole:
+            things.serial_writeline(128 + data)
+            print("Too many dust, PWM > ", 128 + data)
         pass
 
     # 각 장치들 라운드 로빈 스케줄링
