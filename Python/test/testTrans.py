@@ -1,6 +1,6 @@
-import lib.CommuHandler as CommuHandler
+import net.CommuHandler as CommuHandler
 import asyncio
-import os
+
 
 def openCode():
     with open("./test/code.txt") as f:

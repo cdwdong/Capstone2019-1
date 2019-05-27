@@ -1,4 +1,4 @@
-import lib.CommuHandler as ch
+import net.CommuHandler as ch
 import asyncio
 
 def openCode():

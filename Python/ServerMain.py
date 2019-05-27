@@ -1,4 +1,4 @@
-import lib.CommuHandler as CommuHandler
+import net.CommuHandler as CommuHandler
 import asyncio
 from Timing import *
 
@@ -19,7 +19,7 @@ async def eventHandle(reader, writer):
             pass
         elif flag == Timing.SEND_DATA:
             pass
-        elif flag == Timing.ETC:
+        elif flag == Timing.NONE:
             pass
 
     while flag != Timing.ERROR:
