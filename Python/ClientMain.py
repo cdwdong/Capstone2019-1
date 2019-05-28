@@ -42,10 +42,10 @@ async def eventHandle(reader, writer):
             pass
 
         if not code_task is None and code_task.exception():
-            flag.ERROR
+            flag = Timing.ERROR
 
         if not code_task is None and code_task.cancelled():
-            flag.ERROR
+            flag = Timing.ERROR
 
 # ############################### 상태 전이하기  ####################################################
 
@@ -59,12 +59,14 @@ async def eventHandle(reader, writer):
 
             json_message = send_id.getJson()
 
-            # print("ID 보내기> ", json_message)
+            print("ID 보내기> ", json_message)
 
             writer.write(json_message.encode("utf-8"))
             await writer.drain()
 
-            flag.SEND_CODE
+            print("id 보내기 완료")
+
+            flag = Timing.SEND_CODE
 
         elif flag == Timing.SEND_CODE:
 
@@ -80,9 +82,9 @@ async def eventHandle(reader, writer):
 
                 code_task = asyncio.create_task(executeCode(code.decode()))
 
-                flag.SEND_DATA
+                flag = Timing.SEND_DATA
 
-            flag.SEND_CODE
+            flag = Timing.SEND_CODE
 
         elif flag == Timing.SEND_DATA:
 
@@ -106,7 +108,7 @@ async def eventHandle(reader, writer):
 
                 sensor_data_list = ""
 
-            return flag.SEND_DATA
+            flag = Timing.SEND_DATA
 
         elif flag == Timing.ERROR:
             print("원격코드에서 오류나 예외처리 발생")
