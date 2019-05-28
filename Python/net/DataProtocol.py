@@ -58,9 +58,10 @@ class DataProtocol_DATA(DataProtocol):
     def __init__(self):
         super().__init__()
         self.data = None
+        self.increment = None
 
     def getDict(self):
-        dic = dict(data=self.data)
+        dic = dict(data=self.data, increment=self.increment)
         dic.update(self.getDict())
         return dic
 
@@ -68,4 +69,5 @@ class DataProtocol_DATA(DataProtocol):
         super().takeJson(j)
         dic = self.changeJsonToDic(j)
         self.data = dic["data"]
+        self.increment = dic["increment"]
 
