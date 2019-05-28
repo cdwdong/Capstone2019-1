@@ -1,11 +1,12 @@
 import net.CommuHandler as CommuHandler
+import net.DataProtocol as protocol
 import asyncio
 from datetime import datetime
 from Timing import *
-import json
 
 sensor_data_list = []
 things_pointer = 0
+sensing_pointer = 0
 
 async def executeCode(code):
 
@@ -26,6 +27,9 @@ async def eventHandle(reader, writer):
 
     flag = Timing.SEND_ID
     code_task = None
+    send_id = protocol.DataProtocol_ID()
+    send_code = protocol.DataProtocol_CODE()
+    send_data = protocol.DataProtocol_DATA()
 
     while flag != Timing.ERROR:
 
@@ -49,12 +53,16 @@ async def eventHandle(reader, writer):
             ethMAC = getMAC('eth0')
 
             # message = flag.SEND_ID + "," + date + "," + ethMAC
-
-            message = {"flag": flag.SEND_ID,
+            """
+            message = {"msgFlag": flag,
                        "date": date,
-                       "MAC": ethMAC}
+                       "mac": ethMAC}
+            """
+            send_id.msgFlag = flag
+            send_id.date = date
+            send_id.mac = ethMAC
 
-            json_message = json.dumps(message)
+            json_message = send_id.getJson()
 
             writer.write(json_message.encode("utf-8"))
             await writer.drain()
@@ -65,8 +73,12 @@ async def eventHandle(reader, writer):
             global code_task
 
             if code_task is None:
-                code = await reader.read()
+                receive = await reader.read()
                 # executeCode(code.decode())
+                dic = send_code.changeJsonToDic(receive)
+
+                code = dic["code"]
+
                 writer.close()
                 await writer.wait_closed()
 
@@ -89,22 +101,20 @@ async def eventHandle(reader, writer):
 
                 data = data + "]"
 
-                # message = Timing.SEND_DATA + "," + date + "," + data
+                send_data.msgFlag = flag
+                send_data.date = date
+                send_data.increment = sensing_pointer
+                send_data.data = data
 
-                message = {"flag": flag.SEND_DATA,
-                           "date": date,
-                           "increment": things_pointer,
-                           "data": data}
-
-                json_message = json.dumps(message)
+                json_message = send_data.getJson()
 
                 writer.write(json_message.encode("utf-8"))
                 await writer.drain()
 
             return flag.SEND_DATA
 
-        elif flag == Timing.ETC:
-
+        elif flag == Timing.ERROR:
+            print("원격코드에서 오류나 예외처리 발생")
             return flag.ERROR
         pass
 
