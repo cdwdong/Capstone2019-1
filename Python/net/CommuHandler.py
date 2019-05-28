@@ -1,4 +1,3 @@
-from .. import DataProtocol
 import asyncio
 import inspect
 

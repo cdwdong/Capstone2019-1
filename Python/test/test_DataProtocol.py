@@ -1,4 +1,4 @@
-import DataProtocol
+from net import DataProtocol
 
 id = DataProtocol.DataProtocol_ID()
 
