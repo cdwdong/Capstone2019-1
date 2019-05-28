@@ -23,7 +23,19 @@ async def eventHandle(reader, writer):
     msg = None
 
     while flag != Timing.ERROR:
-        if flag == Timing.SEND_ID:
+        ## 타이밍 순서 NONE > ID > CODE > DATA
+        ## 순으로 반복해서 순환
+        if flag == Timing.NONE:
+            while True:
+                # 플래그가 SEND_ID 일때까지 무한반복
+                msg = await reader.read()
+                msg = msg.decode()
+                dicmsg = DataProtocol().changeJsonToDic(msg)
+                if dicmsg["msgFlag"] == Timing.SEND_ID:
+                    flag = dicmsg["msgFlag"]
+                    break
+
+        elif flag == Timing.SEND_ID:
             if msg is None:
                 print("Error: msg is None")
                 flag = Timing.ERROR
@@ -59,16 +71,6 @@ async def eventHandle(reader, writer):
                     break
                 writeSensorData(proto_data)
 
-
-        elif flag == Timing.NONE:
-            while True:
-                # 플래그가 SEND_ID 일때까지 무한반복
-                msg = await reader.read()
-                msg = msg.decode()
-                dicmsg = DataProtocol().changeJsonToDic(msg)
-                if dicmsg["msgFlag"] == Timing.SEND_ID:
-                    flag = dicmsg["msgFlag"]
-                    break
 
     code = openCode()
     if code == -1:
