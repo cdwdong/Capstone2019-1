@@ -8,7 +8,7 @@
 작성자: 서지민
 
 """
-import lib.ThingsInfo as info
+import iot.ThingsInfo as info
 import serial
 
 class ThingsSerial(info.ThingsInfo):
