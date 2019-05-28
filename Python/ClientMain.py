@@ -62,10 +62,9 @@ async def eventHandle(reader, writer):
             writer.write(json_message.encode("utf-8"))
             await writer.drain()
 
-            return flag.SEND_CODE
+            flag.SEND_CODE
 
         elif flag == Timing.SEND_CODE:
-            global code_task
 
             if code_task is None:
                 receive = await reader.read()
@@ -79,9 +78,9 @@ async def eventHandle(reader, writer):
 
                 code_task = asyncio.create_task(executeCode(code.decode()))
 
-                return flag.SEND_DATA
+                flag.SEND_DATA
 
-            return flag.SEND_CODE
+            flag.SEND_CODE
 
         elif flag == Timing.SEND_DATA:
 
@@ -109,9 +108,10 @@ async def eventHandle(reader, writer):
 
         elif flag == Timing.ERROR:
             print("원격코드에서 오류나 예외처리 발생")
-            return flag.ERROR
+            flag.ERROR
         pass
 
 
 client = CommuHandler.ClientHandler('52.78.166.156', 8888)
+
 asyncio.run(client.start(eventHandle))
