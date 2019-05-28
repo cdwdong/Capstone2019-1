@@ -38,26 +38,28 @@ async def eventHandle(reader, writer):
 
 # ############################### 원격실행 테스크 감시  ####################################################
 
-        if code_task and code_task.done():
+        if not code_task is None and code_task.done():
             pass
 
-        if code_task and code_task.exception():
+        if not code_task is None and code_task.exception():
             flag.ERROR
 
-        if code_task and code_task.cancelled():
+        if not code_task is None and code_task.cancelled():
             flag.ERROR
 
 # ############################### 상태 전이하기  ####################################################
 
         if flag == Timing.SEND_ID:
-
+            # print("ID 보내기");
             ethMAC = getMAC('eth0')
 
-            send_id.msgFlag = flag
+            send_id.msgFlag = 1 # json 인코딩 에러로 인하여 int형으로 변경
             send_id.date = date
             send_id.mac = ethMAC
 
             json_message = send_id.getJson()
+
+            # print("ID 보내기> ", json_message)
 
             writer.write(json_message.encode("utf-8"))
             await writer.drain()
@@ -92,7 +94,7 @@ async def eventHandle(reader, writer):
 
                 data = sensor_data_list
 
-                send_data.msgFlag = flag
+                send_data.msgFlag = 3
                 send_data.date = date
                 send_data.increment = sensing_pointer
                 send_data.data = data
@@ -112,6 +114,7 @@ async def eventHandle(reader, writer):
         pass
 
 
-client = CommuHandler.ClientHandler('52.78.166.156', 8888)
+# client = CommuHandler.ClientHandler('52.78.166.156', 8888)
 
+client = CommuHandler.ClientHandler('127.0.0.1', 8888)
 asyncio.run(client.start(eventHandle))
