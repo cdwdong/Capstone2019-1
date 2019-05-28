@@ -82,9 +82,10 @@ async def eventHandle(reader, writer):
 
                 code_task = asyncio.create_task(executeCode(code.decode()))
 
-                flag = Timing.SEND_DATA
+                flag = Timing.SEND_CODE
 
-            flag = Timing.SEND_CODE
+            else:
+                flag = Timing.SEND_DATA
 
         elif flag == Timing.SEND_DATA:
 
@@ -113,8 +114,6 @@ async def eventHandle(reader, writer):
         elif flag == Timing.ERROR:
             print("원격코드에서 오류나 예외처리 발생")
             flag.ERROR
-        pass
-
 
 # client = CommuHandler.ClientHandler('52.78.166.156', 8888)
 
