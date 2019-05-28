@@ -9,7 +9,7 @@
 작성자: 서지민
 
 """
-from iot import ThingsSerial as ts
+import iot.ThingsSerial as ts
 import sys
 import glob
 import serial
@@ -17,7 +17,6 @@ from datetime import datetime
 
 # 통신용 전역변수
 sensor_data_list = []
-things_pointer = 0
 sensing_pointer = 0
 
 # 역치값
@@ -26,8 +25,6 @@ Threshole = 25.0
 
 class ThingsMangement(ts.ThingsSerial):
     # 사전
-
-    global things_pointer
     things_pointer = 0
 
     things_list = []
@@ -46,8 +43,12 @@ class ThingsMangement(ts.ThingsSerial):
         COM_port_list = self.serial_ports()
 
         for com in COM_port_list:
-            things = ts.ThingsSerial(self.things_pointer, com, 9600)
+            print("Serial port > ", com, " processing")
+            things = ts.ThingsSerial(self.things_pointer,com, 9600)
             self.add_things(things)
+            print("things pointer > ", self.things_pointer)
+            
+        print("things register done")
 
     # 장치 등록 ThingsMain 객체를 추가하기
     def add_things(self, source):
@@ -74,7 +75,9 @@ class ThingsMangement(ts.ThingsSerial):
             message = str(things.id) + "," + "data"
             sensor_data_list.append(message)
 
-            self.sensing_pointer = self.sensing_pointer + 1
+            global sensing_pointer
+            
+            sensing_pointer = sensing_pointer + 1
 
     # 상황처리테이블에 따라 팬속도 조절 동적/정적 가능
     def fan_scheduling(self,things):
@@ -124,24 +127,42 @@ class ThingsMangement(ts.ThingsSerial):
                 A list of the serial ports available on the system
         """
         if sys.platform.startswith('win'):
+            print("windows os")
             ports = ['COM%s' % (i + 1) for i in range(256)]
+            
         elif sys.platform.startswith('linux') or sys.platform.startswith('cygwin'):
+            print("linux os")
             # this excludes your current terminal "/dev/tty"
             # USB COM 추가
-            ports = glob.glob('/dev/ttyUSB[A-Za-z]*')
+            ports = glob.glob('/dev/tty[A-Za-z]*')
+            # ports = ['/dev/ttyUSB%s' % (i + 1) for i in range(256)]
         elif sys.platform.startswith('darwin'):
+            print("mac os")
             ports = glob.glob('/dev/tty.*')
+
         else:
             raise EnvironmentError('Unsupported platform')
+            print("unknown os")
 
         result = []
+        
+        print("find total port > ", len(ports))
         for port in ports:
             try:
-                s = serial.Serial(port)
-                s.close()
-                result.append(port)
+                
+                if "USB" in port:
+                    s = serial.Serial(port)
+                    s.close()
+                    result.append(port)
+                    print("Serial port: ", port, "  add port list")
+                    
+                else:
+                    print("Serial port: ", port, "  unknwon port")
+                    
             except (OSError, serial.SerialException):
                 pass
+            
+        print("Serial port scan done \n\n\n")
         return result
 
 
@@ -149,7 +170,6 @@ class ThingsMangement(ts.ThingsSerial):
 
 # 관리하는 객체 생성
 manager = ThingsMangement()
-things_pointer = manager.things_pointer #연결된 아두이노 합계
 
 manager.serial_scheduling() #스케줄링하기
 
