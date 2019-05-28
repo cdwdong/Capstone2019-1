@@ -35,6 +35,7 @@ async def eventHandle(reader, writer):
                     flag = dicmsg["msgFlag"]
                     break
 
+        ##객체에 저장후 플래그 변환
         elif flag == Timing.SEND_ID:
             if msg is None:
                 print("Error: msg is None")
@@ -45,20 +46,25 @@ async def eventHandle(reader, writer):
 
             flag = Timing.SEND_CODE
 
+        ##코드를 파일에서 읽고 객체에 담아 json으로 보내주기
         elif flag == Timing.SEND_CODE:
             code = openCode()
             if code is None:
                 print("Error: code is None")
                 flag = Timing.ERROR
                 break
+
             proto_code = DataProtocol_CODE()
             proto_code.code = code
             proto_code.date = datetime.datetime.now()
             proto_code.msgFlag = Timing.SEND_CODE
+
             writer.write(proto_code.getJson().encode())
             await writer.drain()
+
             flag = Timing.SEND_DATA
 
+        ## 계속 반복하며 데이터객체를 읽어서 파일에 기록
         elif flag == Timing.SEND_DATA:
             proto_data = DataProtocol_DATA()
             proto_data.msgFlag = Timing.SEND_DATA
