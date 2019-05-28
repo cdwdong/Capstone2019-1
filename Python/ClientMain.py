@@ -38,13 +38,13 @@ async def eventHandle(reader, writer):
 
 # ############################### 원격실행 테스크 감시  ####################################################
 
-        if code_task.done():
+        if code_task and code_task.done():
             pass
 
-        if code_task.exception():
+        if code_task and code_task.exception():
             flag.ERROR
 
-        if code_task.cancelled():
+        if code_task and code_task.cancelled():
             flag.ERROR
 
 # ############################### 상태 전이하기  ####################################################
