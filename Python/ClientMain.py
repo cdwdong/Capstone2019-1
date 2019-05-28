@@ -1,4 +1,4 @@
-import lib.CommuHandler as CommuHandler
+import net.CommuHandler as CommuHandler
 import asyncio
 from datetime import datetime
 from Timing import *
