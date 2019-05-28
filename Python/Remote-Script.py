@@ -2,15 +2,13 @@
 2019-05-04
 2019-05-19
 2019-05-23
-
 1. 라즈베리파이에 연결된 아두이노들로부터 센서값 파밍하기
 2. 통신용 전역변수에 넣기
-
 작성자: 서지민
-
 """
 import iot.ThingsSerial as ts
 import sys
+import platform
 import glob
 import serial
 from datetime import datetime
@@ -47,7 +45,7 @@ class ThingsMangement(ts.ThingsSerial):
             things = ts.ThingsSerial(self.things_pointer,com, 9600)
             self.add_things(things)
             print("things pointer > ", self.things_pointer)
-            
+
         print("things register done")
 
     # 장치 등록 ThingsMain 객체를 추가하기
@@ -76,7 +74,7 @@ class ThingsMangement(ts.ThingsSerial):
             sensor_data_list.append(message)
 
             global sensing_pointer
-            
+
             sensing_pointer = sensing_pointer + 1
 
     # 상황처리테이블에 따라 팬속도 조절 동적/정적 가능
@@ -120,16 +118,19 @@ class ThingsMangement(ts.ThingsSerial):
     # 가용 COM포트번호 가져오기
     def serial_ports(self):
         """ Lists serial port names
-
             :raises EnvironmentError:
                 On unsupported or unknown platforms
             :returns:
                 A list of the serial ports available on the system
         """
+
+        os_name = platform.system()
+        print("os name ", os_name)
+
         if sys.platform.startswith('win'):
             print("windows os")
             ports = ['COM%s' % (i + 1) for i in range(256)]
-            
+
         elif sys.platform.startswith('linux') or sys.platform.startswith('cygwin'):
             print("linux os")
             # this excludes your current terminal "/dev/tty"
@@ -145,23 +146,23 @@ class ThingsMangement(ts.ThingsSerial):
             print("unknown os")
 
         result = []
-        
+
         print("find total port > ", len(ports))
         for port in ports:
             try:
-                
-                if "USB" in port:
+
+                if os_name is "Windows" or "USB" in port:
                     s = serial.Serial(port)
                     s.close()
                     result.append(port)
                     print("Serial port: ", port, "  add port list")
-                    
+
                 else:
                     print("Serial port: ", port, "  unknwon port")
-                    
+
             except (OSError, serial.SerialException):
                 pass
-            
+
         print("Serial port scan done \n\n\n")
         return result
 
@@ -172,12 +173,3 @@ class ThingsMangement(ts.ThingsSerial):
 manager = ThingsMangement()
 
 manager.serial_scheduling() #스케줄링하기
-
-
-
-
-
-
-
-
-
