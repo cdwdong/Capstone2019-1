@@ -14,7 +14,7 @@ import serial
 from datetime import datetime
 
 # 통신용 전역변수
-sensor_data_list = []
+sensor_data_list = ""
 sensing_pointer = 0
 
 # 역치값
@@ -70,8 +70,10 @@ class ThingsMangement(ts.ThingsSerial):
             self.sensing_data_list.append(data)
 
             # ######################## 여기서 최종적으로 버퍼에다 데이터 쓰기
-            message = str(things.id) + "," + "data"
-            sensor_data_list.append(message)
+
+            global sensor_data_list
+
+            sensor_data_list = sensor_data_list + data + ","
 
             global sensing_pointer
 

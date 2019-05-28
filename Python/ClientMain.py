@@ -37,13 +37,13 @@ async def eventHandle(reader, writer):
 
 # ############################### 원격실행 테스크 감시  ####################################################
 
-        if code_task and code_task.done():
+        if code_task.done():
             pass
 
-        if code_task and code_task.exception():
+        if code_task.exception():
             flag.ERROR
 
-        if code_task and code_task.cancelled():
+        if code_task.cancelled():
             flag.ERROR
 
 # ############################### 상태 전이하기  ####################################################
@@ -52,12 +52,6 @@ async def eventHandle(reader, writer):
 
             ethMAC = getMAC('eth0')
 
-            # message = flag.SEND_ID + "," + date + "," + ethMAC
-            """
-            message = {"msgFlag": flag,
-                       "date": date,
-                       "mac": ethMAC}
-            """
             send_id.msgFlag = flag
             send_id.date = date
             send_id.mac = ethMAC
@@ -70,7 +64,7 @@ async def eventHandle(reader, writer):
             return flag.SEND_CODE
 
         elif flag == Timing.SEND_CODE:
-            # global code_task
+            global code_task
 
             if code_task is None:
                 receive = await reader.read()
@@ -94,14 +88,8 @@ async def eventHandle(reader, writer):
             global things_pointer
 
             if sensor_data_list:
-                data = "["
 
-                for sensor in sensor_data_list:
-                    data_value = sensor.split(',')
-
-                    data = data + "{" + " \"id\": " + data_value[0] + "," + " \"data\": " + data_value[1] + "}"
-
-                data = data + "]"
+                data = sensor_data_list
 
                 send_data.msgFlag = flag
                 send_data.date = date
