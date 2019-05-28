@@ -97,7 +97,9 @@ async def eventHandle(reader, writer):
                 data = "["
 
                 for sensor in sensor_data_list:
-                    data = data + "{" + " \"id\": " + sensor[0] + "," + " \"data\": " + sensor[1] + "}"
+                    data_value = sensor.split(',')
+
+                    data = data + "{" + " \"id\": " + data_value[0] + "," + " \"data\": " + data_value[1] + "}"
 
                 data = data + "]"
 

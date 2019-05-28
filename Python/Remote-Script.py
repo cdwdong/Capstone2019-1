@@ -18,6 +18,7 @@ from datetime import datetime
 # 통신용 전역변수
 sensor_data_list = []
 things_pointer = 0
+sensing_pointer = 0
 
 # 역치값
 Threshole = 25.0
@@ -25,11 +26,17 @@ Threshole = 25.0
 
 class ThingsMangement(ts.ThingsSerial):
     # 사전
+
+    global things_pointer
     things_pointer = 0
+
     things_list = []
     sensor_data_list = []
 
     sensing_data_list = []
+
+    global sensing_pointer
+
     sensing_pointer = 0
 
     # 생성자 장치들 파악 후 등록
