@@ -19,6 +19,7 @@ sensing_pointer = 0
 
 # 역치값
 Threshole = 25.0
+event_trigger = False
 
 
 class ThingsMangement(ts.ThingsSerial):
@@ -70,7 +71,6 @@ class ThingsMangement(ts.ThingsSerial):
             self.sensing_data_list.append(data)
 
             # ######################## 여기서 최종적으로 버퍼에다 데이터 쓰기
-
             global sensor_data_list
 
             sensor_data_list = sensor_data_list + data + ","
@@ -86,6 +86,8 @@ class ThingsMangement(ts.ThingsSerial):
 
         data = -1
 
+        global event_trigger
+
         if size > 0:
             data = self.sensing_data_list[size-1]
             print("raw data > ", data)
@@ -95,7 +97,13 @@ class ThingsMangement(ts.ThingsSerial):
 
         if data > Threshole:
             things.serial_writeline(128 + data)
-            print("Too many dust, PWM > ", 128 + data)
+            print("Too many dust, PWM > ", 200 + data)
+
+            event_trigger = True
+
+        else:
+            event_trigger = False
+
         pass
 
     # 각 장치들 라운드 로빈 스케줄링

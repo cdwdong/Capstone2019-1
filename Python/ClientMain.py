@@ -7,6 +7,7 @@ from Timing import *
 sensor_data_list = []
 things_pointer = 0
 sensing_pointer = 0
+event_trigger = False
 
 async def executeCode(code):
 
@@ -86,8 +87,9 @@ async def eventHandle(reader, writer):
 
             global sensor_data_list
             global things_pointer
+            global event_trigger
 
-            if sensor_data_list:
+            if sensor_data_list and event_trigger:
 
                 data = sensor_data_list
 
@@ -100,6 +102,8 @@ async def eventHandle(reader, writer):
 
                 writer.write(json_message.encode("utf-8"))
                 await writer.drain()
+
+                sensor_data_list = ""
 
             return flag.SEND_DATA
 
