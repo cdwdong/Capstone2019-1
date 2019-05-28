@@ -2,12 +2,15 @@ import net.CommuHandler as CommuHandler
 import net.DataProtocol as protocol
 import asyncio
 from datetime import datetime
+import time
 from Timing import *
 
 sensor_data_list = []
 things_pointer = 0
 sensing_pointer = 0
 event_trigger = False
+
+waiting_time = 3
 
 async def executeCode(code):
 
@@ -32,6 +35,18 @@ async def eventHandle(reader, writer):
     send_code = protocol.DataProtocol_CODE()
     send_data = protocol.DataProtocol_DATA()
 
+    start = time.time()
+    print("최초 연결시간 ", start)
+    print(waiting_time, "초 대기 후 연결시작")
+    current = 9999
+
+    while current <= start + waiting_time:
+        # writer.write("request connect".encode("utf-8"))
+
+        current = time.time()
+
+    print("Main Loop 시작")
+
     while flag != Timing.ERROR:
 
         date = datetime.today().strftime("%Y-%m-%d %H:%M:%S")
@@ -48,7 +63,7 @@ async def eventHandle(reader, writer):
             flag = Timing.ERROR
 
 # ############################### 상태 전이하기  ####################################################
-
+        # print("Client flag ", flag)
         if flag == Timing.SEND_ID:
             # print("ID 보내기");
             ethMAC = getMAC('eth0')
@@ -69,23 +84,35 @@ async def eventHandle(reader, writer):
             flag = Timing.SEND_CODE
 
         elif flag == Timing.SEND_CODE:
+            receive = await reader.read()
+            receive = receive.decode()
 
-            if code_task is None:
-                receive = await reader.read()
+            writer.close()
+            await writer.wait_closed()
+
+            print("Client Receive SEND_CODE Data > ", receive)
+            if code_task is None and receive:
                 # executeCode(code.decode())
-                dic = send_code.changeJsonToDic(receive)
+
+                send_code.takeJson(receive)
+
+                dic = send_code.getDict()
 
                 code = dic["code"]
+
+                print("Client Receive Code > ", code)
 
                 writer.close()
                 await writer.wait_closed()
 
-                code_task = asyncio.create_task(executeCode(code.decode()))
-
-                flag = Timing.SEND_CODE
+                if code:
+                    code_task = asyncio.create_task(executeCode(code.decode()))
+                    flag = Timing.SEND_DATA
+                else:
+                    code_task = None
 
             else:
-                flag = Timing.SEND_DATA
+                flag = Timing.SEND_CODE
 
         elif flag == Timing.SEND_DATA:
 
@@ -113,7 +140,7 @@ async def eventHandle(reader, writer):
 
         elif flag == Timing.ERROR:
             print("원격코드에서 오류나 예외처리 발생")
-            flag.ERROR
+            flag = Timing.SEND_ID
 
 # client = CommuHandler.ClientHandler('52.78.166.156', 8888)
 
