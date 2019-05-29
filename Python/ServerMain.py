@@ -3,6 +3,8 @@ import asyncio
 from Timing import *
 from net.DataProtocol import *
 import datetime
+import logging
+import logging.config
 
 
 def openCode():
@@ -87,6 +89,17 @@ async def eventHandle(reader, writer):
                     break
                 writeSensorData(proto_data)
 
+#    while flag != Timing.ERROR.value
+
+
+logging.config.fileConfig('conf/logging.conf')
+logger = logging.getLogger()
+
+logger.debug('debug message')
+logger.info('info message')
+logger.warning('warn message')
+logger.error('error message')
+logger.critical('critical message')
 
 server = CommuHandler.ServerHandler('127.0.0.1', 8888)
 asyncio.run(server.start(eventHandle))
