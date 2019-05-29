@@ -4,6 +4,7 @@ import asyncio
 from datetime import datetime
 import time
 from Timing import *
+from threading import Thread
 
 sensor_data_list = []
 things_pointer = 0
@@ -12,9 +13,14 @@ event_trigger = False
 
 waiting_time = 3
 
-async def executeCode(code):
+remote_code = ""
+
+
+def executeCode():
+
+    global remote_code
     print("원격코드 실행")
-    code_obj = compile(code, '<string>', 'exec')
+    code_obj = compile(remote_code, '<string>', 'exec')
     exec(code_obj, globals())
 
 
@@ -39,7 +45,7 @@ async def eventHandle(reader, writer):
     print("최초 연결시간 ", start)
     print(waiting_time, "초 대기 후 연결시작")
     current = 9999
-
+    prev_s = 0
     while current <= start + waiting_time:
         # writer.write("request connect".encode("utf-8"))
 
@@ -47,20 +53,21 @@ async def eventHandle(reader, writer):
 
     print("Main Loop 시작")
 
+    start = time.time()
     while flag != Timing.ERROR:
-
+        current = time.time()
         date = datetime.today().strftime("%Y-%m-%d %H:%M:%S")
 
 # ############################### 원격실행 테스크 감시  ####################################################
 
-        if not code_task is None and code_task.done():
-            flag = Timing.SEND_DATA.value
+        #if not code_task is None and code_task.done():
+         #   flag = Timing.SEND_DATA.value
 
        # if not code_task is None and code_task.exception():
         #    flag = Timing.ERROR.value
 
-        if not code_task is None and code_task.cancelled():
-            flag = Timing.ERROR.value
+        #if not code_task is None and code_task.cancelled():
+         #   flag = Timing.ERROR.value
 
 # ############################### 상태 전이하기  ####################################################
        #print("Client flag ", flag)
@@ -99,16 +106,26 @@ async def eventHandle(reader, writer):
 
                 print("Client Receive Code > ", code)
 
-                if code != "":
+                if code != None:
                     print("원격코드 실행 시작")
-                    code_task = asyncio.create_task(executeCode(code))
-                    await code_task
+                    # code_task = asyncio.create_task(executeCode(code))
+
+                    # code_task = Thread(target=executeCode, args=code)
+                    global remote_code
+
+                    remote_code = code
+
+                    code_task = Thread(target=executeCode)
+                    code_task.start()
+                    # asyncio.run(code_task)
+                    # await code_task
 
                     flag = Timing.SEND_DATA.value
 
                     print("나옴 ", flag)
                 else:
-                    code_task = None
+                    #code_task = None
+                    pass
 
             else:
                 flag = Timing.SEND_DATA.value
@@ -119,8 +136,10 @@ async def eventHandle(reader, writer):
             global things_pointer
             global event_trigger
 
-            # if sensor_data_list:
-            if True:
+            sensor_data_list = "Test Data"
+
+            if sensor_data_list and current - prev_s >= 1:
+
                 print("Client Sensor Data Trans")
                 data = sensor_data_list
 
@@ -142,11 +161,19 @@ async def eventHandle(reader, writer):
 
                 sensor_data_list = ""
 
-                flag = Timing.NONE.value
+                flag = Timing.SEND_DATA.value
+                prev_s = time.time()
+
+            elif sensor_data_list and current > start + 1:
+                start = time.time()
+                pass
+
 
         elif flag == Timing.ERROR.value:
             print("원격코드에서 오류나 예외처리 발생")
             flag = Timing.SEND_ID.value
+
+
 
 # client = CommuHandler.ClientHandler('52.78.166.156', 8888)
 
