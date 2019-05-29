@@ -13,7 +13,7 @@ event_trigger = False
 waiting_time = 3
 
 async def executeCode(code):
-
+    print("원격코드 실행")
     code_obj = compile(code, '<string>', 'exec')
     exec(code_obj, globals())
 
@@ -29,7 +29,7 @@ def getMAC(interface='eth0'):
 
 async def eventHandle(reader, writer):
 
-    flag = Timing.SEND_ID
+    flag = Timing.SEND_ID.value
     code_task = None
     send_id = protocol.DataProtocol_ID()
     send_code = protocol.DataProtocol_CODE()
@@ -54,93 +54,99 @@ async def eventHandle(reader, writer):
 # ############################### 원격실행 테스크 감시  ####################################################
 
         if not code_task is None and code_task.done():
-            pass
+            flag = Timing.SEND_DATA.value
 
-        if not code_task is None and code_task.exception():
-            flag = Timing.ERROR
+       # if not code_task is None and code_task.exception():
+        #    flag = Timing.ERROR.value
 
         if not code_task is None and code_task.cancelled():
-            flag = Timing.ERROR
+            flag = Timing.ERROR.value
 
 # ############################### 상태 전이하기  ####################################################
-        # print("Client flag ", flag)
-        if flag == Timing.SEND_ID:
+       #print("Client flag ", flag)
+        if flag == Timing.SEND_ID.value:
             # print("ID 보내기");
             ethMAC = getMAC('eth0')
 
-            send_id.msgFlag = 1 # json 인코딩 에러로 인하여 int형으로 변경
+            send_id.msgFlag = Timing.SEND_ID.value # json 인코딩 에러로 인하여 int형으로 변경
             send_id.date = date
             send_id.mac = ethMAC
 
-            json_message = send_id.getJson()
+            json_message = send_id.getJson() + "\n"
 
             print("ID 보내기> ", json_message)
 
-            writer.write(json_message.encode("utf-8"))
+            writer.write(json_message.encode())
             await writer.drain()
+
+            #writer.write_eof()
 
             print("id 보내기 완료")
 
-            flag = Timing.SEND_CODE
+            flag = Timing.SEND_CODE.value
 
-        elif flag == Timing.SEND_CODE:
-            receive = await reader.read()
+        elif flag == Timing.SEND_CODE.value:
+            receive = await reader.readline()
             receive = receive.decode()
 
-            writer.close()
-            await writer.wait_closed()
-
-            print("Client Receive SEND_CODE Data > ", receive)
+            #print("Client Receive SEND_CODE Data > ", receive)
             if code_task is None and receive:
                 # executeCode(code.decode())
-
                 send_code.takeJson(receive)
-
                 dic = send_code.getDict()
 
                 code = dic["code"]
 
                 print("Client Receive Code > ", code)
 
-                writer.close()
-                await writer.wait_closed()
+                if code != "":
+                    print("원격코드 실행 시작")
+                    code_task = asyncio.create_task(executeCode(code))
+                    await code_task
 
-                if code:
-                    code_task = asyncio.create_task(executeCode(code.decode()))
-                    flag = Timing.SEND_DATA
+                    flag = Timing.SEND_DATA.value
+
+                    print("나옴 ", flag)
                 else:
                     code_task = None
 
             else:
-                flag = Timing.SEND_CODE
+                flag = Timing.SEND_DATA.value
 
-        elif flag == Timing.SEND_DATA:
+        elif flag == Timing.SEND_DATA.value:
 
             global sensor_data_list
             global things_pointer
             global event_trigger
 
-            if sensor_data_list and event_trigger:
-
+            # if sensor_data_list:
+            if True:
+                print("Client Sensor Data Trans")
                 data = sensor_data_list
 
-                send_data.msgFlag = 3
+                send_data.msgFlag = Timing.SEND_DATA.value
                 send_data.date = date
                 send_data.increment = sensing_pointer
-                send_data.data = data
+                send_data.data = "Test Data,1"
 
-                json_message = send_data.getJson()
+                json_message = send_data.getJson() + "\n"
 
-                writer.write(json_message.encode("utf-8"))
+                print("Client Trans > ", json_message)
+
+                writer.write(json_message.encode())
                 await writer.drain()
+
+                #writer.write_eof()
+
+                #print("Client Trans > ",json_message)
 
                 sensor_data_list = ""
 
-            flag = Timing.SEND_DATA
+                flag = Timing.NONE.value
 
-        elif flag == Timing.ERROR:
+        elif flag == Timing.ERROR.value:
             print("원격코드에서 오류나 예외처리 발생")
-            flag = Timing.SEND_ID
+            flag = Timing.SEND_ID.value
 
 # client = CommuHandler.ClientHandler('52.78.166.156', 8888)
 

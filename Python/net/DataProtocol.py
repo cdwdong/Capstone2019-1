@@ -62,7 +62,7 @@ class DataProtocol_DATA(DataProtocol):
 
     def getDict(self):
         dic = dict(data=self.data, increment=self.increment)
-        dic.update(self.getDict())
+        dic.update(super().getDict())
         return dic
 
     def takeJson(self, j):
