@@ -6,6 +6,12 @@ import time
 from Timing import *
 from threading import Thread
 
+import logging
+import logging.config
+
+logging.config.fileConfig('conf/logging.conf')
+logger = logging.getLogger()
+
 sensor_data_list = []
 things_pointer = 0
 sensing_pointer = 0
@@ -14,7 +20,6 @@ event_trigger = False
 waiting_time = 3
 
 remote_code = ""
-
 
 def executeCode():
 
@@ -35,6 +40,8 @@ def getMAC(interface='eth0'):
 
 async def eventHandle(reader, writer):
 
+    logger.info("클라이언트 시작")
+
     flag = Timing.SEND_ID.value
     code_task = None
     send_id = protocol.DataProtocol_ID()
@@ -42,8 +49,10 @@ async def eventHandle(reader, writer):
     send_data = protocol.DataProtocol_DATA()
 
     start = time.time()
-    print("최초 연결시간 ", start)
-    print(waiting_time, "초 대기 후 연결시작")
+
+    logger.info(f"최초 연결시간 {start} ")
+    logger.info(f" {waiting_time}초 대기 후 연결시작")
+
     current = 9999
     prev_s = 0
     while current <= start + waiting_time:
@@ -51,7 +60,7 @@ async def eventHandle(reader, writer):
 
         current = time.time()
 
-    print("Main Loop 시작")
+    logger.info("Main Loop Start")
 
     start = time.time()
     while flag != Timing.ERROR:
@@ -81,14 +90,15 @@ async def eventHandle(reader, writer):
 
             json_message = send_id.getJson() + "\n"
 
-            print("ID 보내기> ", json_message)
+            #print("ID 보내기> ", json_message)
+            logger.debug(f"Client ID {json_message}")
 
             writer.write(json_message.encode())
             await writer.drain()
 
             #writer.write_eof()
 
-            print("id 보내기 완료")
+            logger.debug("Client ID 보내기 완료")
 
             flag = Timing.SEND_CODE.value
 
@@ -104,7 +114,7 @@ async def eventHandle(reader, writer):
 
                 code = dic["code"]
 
-                print("Client Receive Code > ", code)
+                logger.debug(f"Client Receive Code {code}")
 
                 if code != None:
                     print("원격코드 실행 시작")
@@ -122,7 +132,7 @@ async def eventHandle(reader, writer):
 
                     flag = Timing.SEND_DATA.value
 
-                    print("나옴 ", flag)
+                    logger.debug("Client 원격코드 실행시키고 탈출")
                 else:
                     #code_task = None
                     pass
@@ -140,7 +150,7 @@ async def eventHandle(reader, writer):
 
             if sensor_data_list and current - prev_s >= 1:
 
-                print("Client Sensor Data Trans")
+                logger.debug("Client Sensor Data Trans")
                 data = sensor_data_list
 
                 send_data.msgFlag = Timing.SEND_DATA.value
@@ -150,7 +160,7 @@ async def eventHandle(reader, writer):
 
                 json_message = send_data.getJson() + "\n"
 
-                print("Client Trans > ", json_message)
+                logger.debug(f"Client Trans {json_message} ")
 
                 writer.write(json_message.encode())
                 await writer.drain()
@@ -170,7 +180,7 @@ async def eventHandle(reader, writer):
 
 
         elif flag == Timing.ERROR.value:
-            print("원격코드에서 오류나 예외처리 발생")
+            logger.critical("Client 원격코드나 루프 실행오류")
             flag = Timing.SEND_ID.value
 
 
