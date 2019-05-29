@@ -12,7 +12,7 @@ import logging.config
 logging.config.fileConfig('conf/logging.conf')
 logger = logging.getLogger()
 
-sensor_data_list = []
+sensor_data_list = ""
 things_pointer = 0
 sensing_pointer = 0
 event_trigger = False
@@ -146,17 +146,19 @@ async def eventHandle(reader, writer):
             global things_pointer
             global event_trigger
 
-            sensor_data_list = "Test Data"
+            #sensor_data_list = "Test Data"
 
             if sensor_data_list and current - prev_s >= 1:
 
                 logger.debug("Client Sensor Data Trans")
                 data = sensor_data_list
 
+                logger.debug(f"Client Sensor Data {data}")
+
                 send_data.msgFlag = Timing.SEND_DATA.value
                 send_data.date = date
                 send_data.increment = sensing_pointer
-                send_data.data = "Test Data,1"
+                send_data.data = str(data)
 
                 json_message = send_data.getJson() + "\n"
 
