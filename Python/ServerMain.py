@@ -6,7 +6,7 @@ import datetime
 
 
 def openCode():
-    with open("./test/code.txt") as f:
+    with open("./test/code.txt", 'rt', encoding='UTF8') as f:
         return f.read()
 
 def writeSensorData(dataframe):
