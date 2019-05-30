@@ -3,6 +3,7 @@ import net.DataProtocol as protocol
 import asyncio
 from datetime import datetime
 import time
+import signal
 from Timing import *
 from threading import Thread
 
@@ -17,7 +18,7 @@ things_pointer = 0
 sensing_pointer = 0
 event_trigger = False
 
-waiting_time = 3
+waiting_time = 1
 
 remote_code = ""
 
@@ -40,6 +41,19 @@ def getMAC(interface='eth0'):
 
 async def eventHandle(reader, writer):
 
+    def handle_exit():
+        print("종료됨?")
+        send_exit = protocol.DataProtocol()
+        send_exit.msgFlag = Timing.EXIT
+        send_exit.date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        rawMsg = send_exit.getJson() + '\n'
+        writer.write(rawMsg.encode())
+
+        writer.close()
+        logger.info("소켓 종료됨")
+
+    signal.signal(signal.SIGTERM, handle_exit)
+    signal.signal(signal.SIGINT, handle_exit)
     logger.info("클라이언트 시작")
 
     flag = Timing.SEND_ID.value
@@ -158,7 +172,7 @@ async def eventHandle(reader, writer):
                 send_data.msgFlag = Timing.SEND_DATA.value
                 send_data.date = date
                 send_data.increment = sensing_pointer
-                send_data.data = str(data)
+                send_data.data = data
 
                 json_message = send_data.getJson() + "\n"
 
@@ -178,7 +192,6 @@ async def eventHandle(reader, writer):
 
             elif sensor_data_list and current > start + 1:
                 start = time.time()
-                pass
 
 
         elif flag == Timing.ERROR.value:
@@ -187,7 +200,9 @@ async def eventHandle(reader, writer):
 
 
 
+
 # client = CommuHandler.ClientHandler('52.78.166.156', 8888)
+
 
 client = CommuHandler.ClientHandler('127.0.0.1', 8888)
 asyncio.run(client.start(eventHandle))
