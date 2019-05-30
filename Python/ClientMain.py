@@ -198,8 +198,13 @@ async def eventHandle(reader, writer):
             logger.critical("Client 원격코드나 루프 실행오류")
             flag = Timing.SEND_ID.value
 
+        elif flag == Timing.EXIT.value:
+            logger.debug("Timing.EXIT.value 받음 종료 루틴 시작")
 
-
+            writer.close()
+            await writer.wait_closed()
+            logger.info("소켓 종료됨")
+            break
 
 # client = CommuHandler.ClientHandler('52.78.166.156', 8888)
 
