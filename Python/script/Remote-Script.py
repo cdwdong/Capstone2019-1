@@ -74,7 +74,7 @@ class ThingsMangement(ts.ThingsSerial):
             global sensor_data_list
 
             #sensor_data_list = sensor_data_list + data + ","
-            sensor_data_list = {"id": things.id, "date": date, "data": 25}
+            sensor_data_list = {"id": things.id, "date": date, "data": data}
 
             global sensing_pointer
 
