@@ -6,7 +6,7 @@ import time
 import signal
 from Timing import *
 from threading import Thread
-
+import sys
 import logging
 import logging.config
 
@@ -40,8 +40,10 @@ def getMAC(interface='eth0'):
 
 
 async def eventHandle(reader, writer):
+    
+    code_task = None
 
-    def handle_exit():
+    def handle_exit(signalnum, cstack):
         print("종료됨?")
         send_exit = protocol.DataProtocol()
         send_exit.msgFlag = Timing.EXIT
@@ -51,13 +53,13 @@ async def eventHandle(reader, writer):
 
         writer.close()
         logger.info("소켓 종료됨")
+        sys.exit(1)
 
     signal.signal(signal.SIGTERM, handle_exit)
     signal.signal(signal.SIGINT, handle_exit)
     logger.info("클라이언트 시작")
 
     flag = Timing.SEND_ID.value
-    code_task = None
     send_id = protocol.DataProtocol_ID()
     send_code = protocol.DataProtocol_CODE()
     send_data = protocol.DataProtocol_DATA()
@@ -93,6 +95,8 @@ async def eventHandle(reader, writer):
          #   flag = Timing.ERROR.value
 
 # ############################### 상태 전이하기  ####################################################
+
+    
        #print("Client flag ", flag)
         if flag == Timing.SEND_ID.value:
             # print("ID 보내기");
@@ -206,8 +210,20 @@ async def eventHandle(reader, writer):
             logger.info("소켓 종료됨")
             break
 
-# client = CommuHandler.ClientHandler('52.78.166.156', 8888)
+client = CommuHandler.ClientHandler('52.78.166.156', 8888)
 
-
-client = CommuHandler.ClientHandler('127.0.0.1', 8888)
-asyncio.run(client.start(eventHandle))
+try:
+    # client = CommuHandler.ClientHandler('127.0.0.1', 8888)
+    asyncio.run(client.start(eventHandle))
+except ConnectionResetError:
+    """
+    send_exit = protocol.DataProtocol()
+    send_exit.msgFlag = Timing.EXIT.value
+    send_exit.date = datetime.today().strftime("%Y-%m-%d %H:%M:%S")
+    rawMsg = send_exit.getJson() + '\n'
+    writer.write(rawMsg.encode())
+    """
+    
+    # writer.close()
+    logger.info("소켓 종료됨")
+    sys.exit(1)
