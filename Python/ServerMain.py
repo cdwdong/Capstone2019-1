@@ -7,6 +7,7 @@ import logging
 import logging.config
 import pymongo
 
+TIMEOUT = 5
 
 def openCode():
     with open("./script/Remote-Script.py", 'rt', encoding='UTF8') as f:
@@ -17,14 +18,28 @@ def writeSensorData(dataframe):
         logger.info(f"DB에 추가 : {dataframe.data}")
         collection.insert(dataframe.data)
 
-
+async def timeoutReadData(reader):
+    return await reader.readline()
+    
+    
 async def eventHandle(reader, writer):
     
     flag = Timing.NONE.value
 
     while flag != Timing.ERROR.value:
         logger.debug("메시지 수신준비")
-        msg = await reader.readline()
+        msg = None
+        
+        try:
+            readTask = asyncio.create_task(timeoutReadData(reader))
+            await asyncio.wait_for(readTask, timeout=TIMEOUT)
+            msg = readTask.result()
+            
+        except asyncio.TimeoutError:
+            logger.error("ERROR! CONNECTION TIMEOUT")
+            flag = Timing.ERROR.value
+            break
+        
         date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
         if reader.at_eof():
