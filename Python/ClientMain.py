@@ -17,13 +17,13 @@ sensor_data_list = ""
 things_pointer = 0
 sensing_pointer = 0
 event_trigger = False
-
-waiting_time = 1
+main_loop = True
+waiting_time = 5
 
 remote_code = ""
 
-def executeCode():
 
+def executeCode():
     global remote_code
     print("원격코드 실행")
     code_obj = compile(remote_code, '<string>', 'exec')
@@ -40,7 +40,6 @@ def getMAC(interface='eth0'):
 
 
 async def eventHandle(reader, writer):
-    
     code_task = None
 
     def handle_exit(signalnum, cstack):
@@ -52,6 +51,9 @@ async def eventHandle(reader, writer):
         writer.write(rawMsg.encode())
 
         writer.close()
+
+        global main_loop
+        main_loop = False
         logger.info("소켓 종료됨")
         sys.exit(1)
 
@@ -65,17 +67,10 @@ async def eventHandle(reader, writer):
     send_data = protocol.DataProtocol_DATA()
 
     start = time.time()
+    prev_s = 0
 
     logger.info(f"최초 연결시간 {start} ")
     logger.info(f" {waiting_time}초 대기 후 연결시작")
-
-    current = 9999
-    prev_s = 0
-    while current <= start + waiting_time:
-        # writer.write("request connect".encode("utf-8"))
-
-        current = time.time()
-
     logger.info("Main Loop Start")
 
     start = time.time()
@@ -83,38 +78,37 @@ async def eventHandle(reader, writer):
         current = time.time()
         date = datetime.today().strftime("%Y-%m-%d %H:%M:%S")
 
-# ############################### 원격실행 테스크 감시  ####################################################
+        # ############################### 원격실행 테스크 감시  ####################################################
 
-        #if not code_task is None and code_task.done():
-         #   flag = Timing.SEND_DATA.value
+        # if not code_task is None and code_task.done():
+        #   flag = Timing.SEND_DATA.value
 
-       # if not code_task is None and code_task.exception():
+        # if not code_task is None and code_task.exception():
         #    flag = Timing.ERROR.value
 
-        #if not code_task is None and code_task.cancelled():
-         #   flag = Timing.ERROR.value
+        # if not code_task is None and code_task.cancelled():
+        #   flag = Timing.ERROR.value
 
-# ############################### 상태 전이하기  ####################################################
+        # ############################### 상태 전이하기  ####################################################
 
-    
-       #print("Client flag ", flag)
+        # print("Client flag ", flag)
         if flag == Timing.SEND_ID.value:
             # print("ID 보내기");
             ethMAC = getMAC('eth0')
 
-            send_id.msgFlag = Timing.SEND_ID.value # json 인코딩 에러로 인하여 int형으로 변경
+            send_id.msgFlag = Timing.SEND_ID.value  # json 인코딩 에러로 인하여 int형으로 변경
             send_id.date = date
             send_id.mac = ethMAC
 
             json_message = send_id.getJson() + "\n"
 
-            #print("ID 보내기> ", json_message)
+            # print("ID 보내기> ", json_message)
             logger.debug(f"Client ID {json_message}")
 
             writer.write(json_message.encode())
             await writer.drain()
 
-            #writer.write_eof()
+            # writer.write_eof()
 
             logger.debug("Client ID 보내기 완료")
 
@@ -124,7 +118,7 @@ async def eventHandle(reader, writer):
             receive = await reader.readline()
             receive = receive.decode()
 
-            #print("Client Receive SEND_CODE Data > ", receive)
+            # print("Client Receive SEND_CODE Data > ", receive)
             if code_task is None and receive:
                 # executeCode(code.decode())
                 send_code.takeJson(receive)
@@ -152,7 +146,7 @@ async def eventHandle(reader, writer):
 
                     logger.debug("Client 원격코드 실행시키고 탈출")
                 else:
-                    #code_task = None
+                    # code_task = None
                     pass
 
             else:
@@ -164,7 +158,7 @@ async def eventHandle(reader, writer):
             global things_pointer
             global event_trigger
 
-            #sensor_data_list = "Test Data"
+            # sensor_data_list = "Test Data"
 
             if sensor_data_list and current - prev_s >= 1:
 
@@ -185,9 +179,9 @@ async def eventHandle(reader, writer):
                 writer.write(json_message.encode())
                 await writer.drain()
 
-                #writer.write_eof()
+                # writer.write_eof()
 
-                #print("Client Trans > ",json_message)
+                # print("Client Trans > ",json_message)
 
                 sensor_data_list = ""
 
@@ -210,20 +204,22 @@ async def eventHandle(reader, writer):
             logger.info("소켓 종료됨")
             break
 
-client = CommuHandler.ClientHandler('52.78.166.156', 8888)
+local_start = time.time()
+local_current = 9999
+
+while local_current <= local_start + waiting_time:
+
+    local_current = time.time()
+
+
+client = CommuHandler.ClientHandler('127.0.0.1', 8888)
+# client = CommuHandler.ClientHandler('52.78.166.156', 8888)
 
 try:
-    # client = CommuHandler.ClientHandler('127.0.0.1', 8888)
+
     asyncio.run(client.start(eventHandle))
 except ConnectionResetError:
-    """
-    send_exit = protocol.DataProtocol()
-    send_exit.msgFlag = Timing.EXIT.value
-    send_exit.date = datetime.today().strftime("%Y-%m-%d %H:%M:%S")
-    rawMsg = send_exit.getJson() + '\n'
-    writer.write(rawMsg.encode())
-    """
-    
-    # writer.close()
+
+    main_loop = False
     logger.info("소켓 종료됨")
     sys.exit(1)
