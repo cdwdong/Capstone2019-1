@@ -5,7 +5,7 @@ from net.DataProtocol import *
 import datetime
 import logging
 import logging.config
-
+import pymongo
 
 
 def openCode():
@@ -14,13 +14,7 @@ def openCode():
 
 def writeSensorData(dataframe):
     if dataframe.msgFlag == Timing.SEND_DATA.value:
-        with open("datafile.txt", "w") as datafile:
-            dataTmp = str(dataframe.date)
-            for k, v in dataframe.data.items():
-                dataTmp += str(v)
-
-            dataTmp += "\n"
-            datafile.writelines(dataTmp)
+        collection.insert(dataframe.data)
 
 
 async def eventHandle(reader, writer):
@@ -93,7 +87,12 @@ async def eventHandle(reader, writer):
 logging.config.fileConfig('conf/logging.conf')
 logger = logging.getLogger()
 
+logger.info("db 연결")
+mongo = pymongo.MongoClient('127.0.0.1', 27017)
+db = mongo.get_database('db_capstone2019')
+collection = db.get_collection('sensor_data')
+
 logger.info("서버 시작")
-server = CommuHandler.ServerHandler('172.26.2.32', 8888)
+server = CommuHandler.ServerHandler('172.26.3.162', 8888)
 asyncio.run(server.start(eventHandle))
 
