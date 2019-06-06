@@ -1,11 +1,3 @@
-"""
-2019-05-04
-2019-05-19
-2019-05-23
-1. 라즈베리파이에 연결된 아두이노들로부터 센서값 파밍하기
-2. 통신용 전역변수에 넣기
-작성자: 서지민
-"""
 import iot.ThingsSerial as ts
 import sys
 import platform
