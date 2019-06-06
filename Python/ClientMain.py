@@ -212,8 +212,8 @@ while local_current <= local_start + waiting_time:
     local_current = time.time()
 
 
-client = CommuHandler.ClientHandler('127.0.0.1', 8888)
-# client = CommuHandler.ClientHandler('52.78.166.156', 8888)
+# client = CommuHandler.ClientHandler('127.0.0.1', 8888)
+client = CommuHandler.ClientHandler('52.78.166.156', 8888)
 
 try:
 
