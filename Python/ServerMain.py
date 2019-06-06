@@ -13,8 +13,10 @@ def openCode():
 
 def writeSensorData(dataframe):
     if dataframe.msgFlag == Timing.SEND_DATA.value:
-        logger.info(f"DB에 추가 : {dataframe.data}")
-        collection.insert(dataframe.data)
+        tuple = dataframe.data.copy()
+        tuple['date'] = dataframe.date
+        logger.info(f"DB에 추가 : {tuple}")
+        collection.insert(tuple)
     
 async def eventHandle(reader, writer):
     
