@@ -20,6 +20,7 @@ sensing_pointer = 0
 # 역치값
 Threshole = 25.0
 event_trigger = False
+main_loop = True
 
 
 class ThingsMangement(ts.ThingsSerial):
@@ -109,7 +110,7 @@ class ThingsMangement(ts.ThingsSerial):
 
     # 각 장치들 라운드 로빈 스케줄링
     def serial_scheduling(self):
-        while True:
+        while main_loop:
 
             # 역활 구분하여 스케줄링
             for things in self.things_list:

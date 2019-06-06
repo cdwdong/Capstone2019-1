@@ -7,10 +7,10 @@ import logging
 import logging.config
 
 
-
 def openCode():
     with open("./script/Remote-Script.py", 'rt', encoding='UTF8') as f:
         return f.read()
+
 
 def writeSensorData(dataframe):
     if dataframe.msgFlag == Timing.SEND_DATA.value:
@@ -24,7 +24,6 @@ def writeSensorData(dataframe):
 
 
 async def eventHandle(reader, writer):
-    
     flag = Timing.NONE.value
 
     while flag != Timing.ERROR.value:
@@ -94,6 +93,6 @@ logging.config.fileConfig('conf/logging.conf')
 logger = logging.getLogger()
 
 logger.info("서버 시작")
-server = CommuHandler.ServerHandler('172.26.2.32', 8888)
+# server = CommuHandler.ServerHandler('172.26.2.32', 8888)
+server = CommuHandler.ServerHandler('127.0.0.1', 8888)
 asyncio.run(server.start(eventHandle))
-
