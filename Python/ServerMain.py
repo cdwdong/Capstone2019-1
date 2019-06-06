@@ -7,10 +7,10 @@ import logging
 import logging.config
 import pymongo
 
+
 def openCode():
     with open("./script/Remote-Script.py", 'rt', encoding='UTF8') as f:
         return f.read()
-
 
 def writeSensorData(dataframe):
     if dataframe.msgFlag == Timing.SEND_DATA.value:
@@ -18,6 +18,7 @@ def writeSensorData(dataframe):
 
 
 async def eventHandle(reader, writer):
+    
     flag = Timing.NONE.value
 
     while flag != Timing.ERROR.value:
@@ -92,10 +93,6 @@ db = mongo.get_database('db_capstone2019')
 collection = db.get_collection('sensor_data')
 
 logger.info("서버 시작")
-<<<<<<< HEAD
 server = CommuHandler.ServerHandler('172.26.3.162', 8888)
-=======
-# server = CommuHandler.ServerHandler('172.26.2.32', 8888)
-server = CommuHandler.ServerHandler('127.0.0.1', 8888)
->>>>>>> 578ac6350ce5802202faa23f0a2c43e1436d807b
 asyncio.run(server.start(eventHandle))
+
