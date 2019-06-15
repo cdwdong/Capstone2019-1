@@ -35,22 +35,60 @@ var wfdv7 = null;
 $.getJSON( "http://52.78.166.156:8080/sensor_json", function( data ) {
 					var n = $(data).length;
 
-					wfdv1 = (data[parseInt((n-1)/7)].data);
-					wfdv2 = (data[parseInt(((n-1)/7)*2)].data);
-					wfdv3 = (data[parseInt(((n-1)/7)*3)].data);
-					wfdv4 = (data[parseInt(((n-1)/7)*4)].data);
-					wfdv5 = (data[parseInt(((n-1)/7)*5)].data);
-					wfdv6 = (data[parseInt(((n-1)/7)*6)].data);
-					wfdv7 = (data[n-1].data);
+					if( n < 7){ 
+						wfdv1 = 0;
+						wfdv2 = 0;
+						wfdv3 = 0;
+						wfdv4 = 0;
+						wfdv5 = 0;
+						wfdv6 = 0;
+						wfdv7 = 0;
 					
-					wfdt1 = (data[parseInt((n-1)/7)].date);
-					wfdt2 = (data[parseInt(((n-1)/7)*2)].date);
-					wfdt3 = (data[parseInt(((n-1)/7)*3)].date);
-					wfdt4 = (data[parseInt(((n-1)/7)*4)].date);
-					wfdt5 = (data[parseInt(((n-1)/7)*5)].date);
-					wfdt6 = (data[parseInt(((n-1)/7)*6)].date);
-					wfdt7 = (data[n-1].date);
-				
+						wfdt1 = 'n';
+						wfdt2 = 'o';
+						wfdt3 = 'd';
+						wfdt4 = 'a';
+						wfdt5 = 't';
+						wfdt6 = 'a';
+						wfdt7 = 'x';
+					}
+					
+					else if( n > 6 , n < 57) { 
+						wfdv1 = (data[n-7].data);
+						wfdv2 = (data[n-6].data);
+						wfdv3 = (data[n-5].data);
+						wfdv4 = (data[n-4].data);
+						wfdv5 = (data[n-3].data);
+						wfdv6 = (data[n-2].data);
+						wfdv7 = (data[n-1].data);
+					
+						wfdt1 = (data[n-7].date);
+						wfdt2 = (data[n-6].date);
+						wfdt3 = (data[n-5].date);
+						wfdt4 = (data[n-4].date);
+						wfdt5 = (data[n-3].date);
+						wfdt6 = (data[n-2].date);
+						wfdt7 = (data[n-1].date);
+					
+					}
+					
+					else { 
+						wfdv1 = (data[parseInt((n-1)/7)].data);
+						wfdv2 = (data[parseInt(((n-1)/7)*2)].data);
+						wfdv3 = (data[parseInt(((n-1)/7)*3)].data);
+						wfdv4 = (data[parseInt(((n-1)/7)*4)].data);
+						wfdv5 = (data[parseInt(((n-1)/7)*5)].data);
+						wfdv6 = (data[parseInt(((n-1)/7)*6)].data);
+						wfdv7 = (data[n-1].data);
+					
+						wfdt1 = (data[parseInt((n-1)/7)].date);
+						wfdt2 = (data[parseInt(((n-1)/7)*2)].date);
+						wfdt3 = (data[parseInt(((n-1)/7)*3)].date);
+						wfdt4 = (data[parseInt(((n-1)/7)*4)].date);
+						wfdt5 = (data[parseInt(((n-1)/7)*5)].date);
+						wfdt6 = (data[parseInt(((n-1)/7)*6)].date);
+						wfdt7 = (data[n-1].date);
+					}
 
 WFD = [wfdv1, wfdv2, wfdv3, wfdv4, wfdv5, wfdv6, wfdv7]; // 미세먼지 량
 

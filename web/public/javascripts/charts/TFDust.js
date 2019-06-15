@@ -36,22 +36,61 @@ var tfdv7 = null;
 $.getJSON( "http://52.78.166.156:8080/sensor_json", function( data ) {
 					var n = $(data).length;
 					
-					tfdv1 = (data[n-55].data);
-					tfdv2 = (data[n-46].data);
-					tfdv3 = (data[n-37].data);
-					tfdv4 = (data[n-28].data);
-					tfdv5 = (data[n-19].data);
-					tfdv6 = (data[n-10].data);
-					tfdv7 = (data[n-1].data);
+					if( n < 7){ 
+						tfdv1 = 0;
+						tfdv2 = 0;
+						tfdv3 = 0;
+						tfdv4 = 0;
+						tfdv5 = 0;
+						tfdv6 = 0;
+						tfdv7 = 0;
 					
-					tfdt1 = (data[n-55].date);
-					tfdt2 = (data[n-46].date);
-					tfdt3 = (data[n-37].date);
-					tfdt4 = (data[n-28].date);
-					tfdt5 = (data[n-19].date);
-					tfdt6 = (data[n-10].date);
-					tfdt7 = (data[n-1].date);
-
+						tfdt1 = 'n';
+						tfdt2 = 'o';
+						tfdt3 = 'd';
+						tfdt4 = 'a';
+						tfdt5 = 't';
+						tfdt6 = 'a';
+						tfdt7 = 'x';
+					}
+					
+					else if( n > 6 , n < 57) { 
+						tfdv1 = (data[n-7].data);
+						tfdv2 = (data[n-6].data);
+						tfdv3 = (data[n-5].data);
+						tfdv4 = (data[n-4].data);
+						tfdv5 = (data[n-3].data);
+						tfdv6 = (data[n-2].data);
+						tfdv7 = (data[n-1].data);
+					
+						tfdt1 = (data[n-7].date);
+						tfdt2 = (data[n-6].date);
+						tfdt3 = (data[n-5].date);
+						tfdt4 = (data[n-4].date);
+						tfdt5 = (data[n-3].date);
+						tfdt6 = (data[n-2].date);
+						tfdt7 = (data[n-1].date);
+					
+					}
+					
+					else { 
+						tfdv1 = (data[n-55].data);
+						tfdv2 = (data[n-46].data);
+						tfdv3 = (data[n-37].data);
+						tfdv4 = (data[n-28].data);
+						tfdv5 = (data[n-19].data);
+						tfdv6 = (data[n-10].data);
+						tfdv7 = (data[n-1].data);
+					
+						tfdt1 = (data[n-55].date);
+						tfdt2 = (data[n-46].date);
+						tfdt3 = (data[n-37].date);
+						tfdt4 = (data[n-28].date);
+						tfdt5 = (data[n-19].date);
+						tfdt6 = (data[n-10].date);
+						tfdt7 = (data[n-1].date);
+					}
+					
 TFD = [tfdv1, tfdv2, tfdv3, tfdv4, tfdv5, tfdv6, tfdv7]; //미세먼지 량
 
 LCData = {
