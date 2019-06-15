@@ -34,22 +34,21 @@ var wfdv7 = null;
 
 $.getJSON( "http://52.78.166.156:8080/sensor_json", function( data ) {
 					var n = $(data).length;
-					console.log(data[n-1].data);
 
-					wfdv1 = (data[n-361].data);
-					wfdv2 = (data[n-301].data);
-					wfdv3 = (data[n-241].data);
-					wfdv4 = (data[n-181].data);
-					wfdv5 = (data[n-121].data);
-					wfdv6 = (data[n-61].data);
+					wfdv1 = (data[parseInt((n-1)/7)].data);
+					wfdv2 = (data[parseInt(((n-1)/7)*2)].data);
+					wfdv3 = (data[parseInt(((n-1)/7)*3)].data);
+					wfdv4 = (data[parseInt(((n-1)/7)*4)].data);
+					wfdv5 = (data[parseInt(((n-1)/7)*5)].data);
+					wfdv6 = (data[parseInt(((n-1)/7)*6)].data);
 					wfdv7 = (data[n-1].data);
 					
-					wfdt1 = (data[n-361].date);
-					wfdt2 = (data[n-301].date);
-					wfdt3 = (data[n-241].date);
-					wfdt4 = (data[n-181].date);
-					wfdt5 = (data[n-121].date);
-					wfdt6 = (data[n-61].date);
+					wfdt1 = (data[parseInt((n-1)/7)].date);
+					wfdt2 = (data[parseInt(((n-1)/7)*2)].date);
+					wfdt3 = (data[parseInt(((n-1)/7)*3)].date);
+					wfdt4 = (data[parseInt(((n-1)/7)*4)].date);
+					wfdt5 = (data[parseInt(((n-1)/7)*5)].date);
+					wfdt6 = (data[parseInt(((n-1)/7)*6)].date);
 					wfdt7 = (data[n-1].date);
 				
 
