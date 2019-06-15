@@ -14,26 +14,55 @@ var ChartHelper = {
 //전체 잡고 초기화 한번
 var color = Chart.helpers.color;
 var WFD = null;
-var WFPM = null;
 var LCData = null;
 
-WFD = ['155.5', '120', '100', '98', '85', '66.6', '33.3']; //요일별 미세먼지
-WFPM = ['88.8', '80', '70', '66.6', '40', '33.3', '20']; //요일별 초미세먼지
+var wfdv1 = null;
+var wfdv2 = null;
+var wfdv3 = null;
+var wfdv4 = null;
+var wfdv5 = null;
+var wfdv6 = null;
+var wfdv7 = null;
+
+var wfdt1 = null;
+var wfdt2 = null;
+var wfdt3 = null;
+var wfdt4 = null;
+var wfdt5 = null;
+var wfdt6 = null;
+var wfdv7 = null;
+
+$.getJSON( "http://52.78.166.156:8080/sensor_json", function( data ) {
+					var n = $(data).length;
+					console.log(data[n-1].data);
+
+					wfdv1 = (data[n-361].data);
+					wfdv2 = (data[n-301].data);
+					wfdv3 = (data[n-241].data);
+					wfdv4 = (data[n-181].data);
+					wfdv5 = (data[n-121].data);
+					wfdv6 = (data[n-61].data);
+					wfdv7 = (data[n-1].data);
+					
+					wfdt1 = (data[n-361].date);
+					wfdt2 = (data[n-301].date);
+					wfdt3 = (data[n-241].date);
+					wfdt4 = (data[n-181].date);
+					wfdt5 = (data[n-121].date);
+					wfdt6 = (data[n-61].date);
+					wfdt7 = (data[n-1].date);
+				
+
+WFD = [wfdv1, wfdv2, wfdv3, wfdv4, wfdv5, wfdv6, wfdv7]; // 미세먼지 량
+
 LCData = {
-			labels: ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'], //밑에 라벨
+			labels: [wfdt1, wfdt2, wfdt3, wfdt4, wfdt5, wfdt6, wfdt7], //밑에 라벨
 			datasets: [{
-						label: '요일별 미세먼지',
-						backgroundColor: color(ChartHelper.chartColors.green).alpha(0.2).rgbString(),
+						label: '장기간 미세먼지',
+						backgroundColor: color(ChartHelper.chartColors.green).alpha(0.4).rgbString(),
 						borderColor: ChartHelper.chartColors.green,
 						borderWidth: 2,
 						data: WFD
-						},
-						{
-						label: '요일별 초미세먼지',
-						backgroundColor: color(ChartHelper.chartColors.yellow).alpha(0.7).rgbString(),
-						borderColor: ChartHelper.chartColors.yellow,
-						borderWidth: 2,
-						data: WFPM
 						}]
 			};
 
@@ -61,3 +90,4 @@ window.LChart = new Chart(ctx, {
 
 var colorNames = Object.keys(ChartHelper.chartColors);
 
+});

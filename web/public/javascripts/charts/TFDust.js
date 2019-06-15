@@ -14,26 +14,54 @@ var ChartHelper = {
 //전체 잡고 초기화 한번
 var color = Chart.helpers.color; 
 var TFD = null;
-var TFPM = null;
 var LCData = null;
 
-TFD = ['111', '128', '156', '181', '175', '160', '170', '145', '124', '102', '87', '66']; //시간별 미세먼지
-TFPM = ['78', '88', '91', '92', '85', '77', '71', '63', '62', '53', '44', '30']; //시간별 초미세먼지
+var tfdv1 = null;
+var tfdv2 = null;
+var tfdv3 = null;
+var tfdv4 = null;
+var tfdv5 = null;
+var tfdv6 = null;
+var tfdv7 = null;
+
+var tfdt1 = null;
+var tfdt2 = null;
+var tfdt3 = null;
+var tfdt4 = null;
+var tfdt5 = null;
+var tfdt6 = null;
+var tfdv7 = null;
+
+
+$.getJSON( "http://52.78.166.156:8080/sensor_json", function( data ) {
+					var n = $(data).length;
+					
+					tfdv1 = (data[n-55].data);
+					tfdv2 = (data[n-46].data);
+					tfdv3 = (data[n-37].data);
+					tfdv4 = (data[n-28].data);
+					tfdv5 = (data[n-19].data);
+					tfdv6 = (data[n-10].data);
+					tfdv7 = (data[n-1].data);
+					
+					tfdt1 = (data[n-55].date);
+					tfdt2 = (data[n-46].date);
+					tfdt3 = (data[n-37].date);
+					tfdt4 = (data[n-28].date);
+					tfdt5 = (data[n-19].date);
+					tfdt6 = (data[n-10].date);
+					tfdt7 = (data[n-1].date);
+
+TFD = [tfdv1, tfdv2, tfdv3, tfdv4, tfdv5, tfdv6, tfdv7]; //미세먼지 량
+
 LCData = {
-			labels: ['01시', '03시', '05시', '07시', '09시', '11시', '13시', '15시', '17시', '19시', '21시', '23시'], //밑에 라벨인데 2시간 간격
+			labels: [tfdt1, tfdt2, tfdt3, tfdt4, tfdt5, tfdt6, tfdt7], //밑에 라벨인데 10틱 간격
 			datasets: [{
-						label: '시간별 미세먼지',
-						backgroundColor: color(ChartHelper.chartColors.blue).alpha(0.2).rgbString(),
+						label: '최근 시간별 미세먼지',
+						backgroundColor: color(ChartHelper.chartColors.blue).alpha(0.4).rgbString(),
 						borderColor: ChartHelper.chartColors.blue,
 						borderWidth: 2,
 						data: TFD
-						},
-						{
-						label: '시간별 초 미세먼지',
-						backgroundColor: color(ChartHelper.chartColors.red).alpha(0.7).rgbString(),
-						borderColor: ChartHelper.chartColors.red,
-						borderWidth: 2,
-						data: TFPM
 						}]
 			};
 
@@ -61,3 +89,4 @@ window.LChart = new Chart(ctx, {
 
 var colorNames = Object.keys(ChartHelper.chartColors);
 
+});

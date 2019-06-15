@@ -19,7 +19,7 @@
 		<script src="http://52.78.166.156:8080/javascripts/clock.js"></script>   
 		<script src="http://52.78.166.156:8080/javascripts/chart.bundle.js"></script>
 		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o" crossorigin="anonymous"></script>
-	
+		
 		<style type="text/css">
 			body{
 				padding-top: 70px;
@@ -27,7 +27,7 @@
 			#stage{ 
 				border: 0px;
 				background-color:none;
-                width: 210px;
+                width: 100%;
 				}
 			#YMD{	
 				border: 0px;
@@ -36,7 +36,7 @@
 			#hms{ 
 				border: 0px;
                 text-align:center; color:white;
-                font-weight: bold; font-size:30px;
+                font-weight: bold; font-size:250%;
 				}
 		</style>
 		<style>
@@ -55,17 +55,12 @@
 			</button>
 			<div class="collapse navbar-collapse" id="navbarNav">
 				<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-					<li class="nav-item">
-						<a class="nav-link" href="http://52.78.166.156:8080/html/start.html">시작으로</a>
-					</li>
+					
 					<li class="nav-item">
 						<a class="nav-link" href="https://www.airkorea.or.kr/web">전국 미세먼지</a>
 					</li>
 					<li>
 						<a class="nav-link" href="http://www.kma.go.kr/">전국 날씨</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link disabled" href="#">추가2</a>
 					</li>
 				</ul>
 				<form class="form-inline my-2 my-lg-0">
@@ -80,78 +75,48 @@
 		<!-- 1열 -->
 		<div class="row">
 
-			<!-- 유우저어 -->
+			<!-- 현재시간 -->
 			<div class="col-sm-4 col-lg-4">
 				<div class="dash-unit">
-					<dtitle>사용자</dtitle>
-					<hr>
-					<div class="thumbnail">
-						<img src="http://52.78.166.156:8080/images/줌베이라.jpg" alt="줌베이라" class="img-circle">
+					<dtitle>현재 시간</dtitle>
+					<hr><br><br><br>
+					<div class="container-fluid" id="stage">
+					<div id="hms" ></div>
 					</div>
-					<br>
-					<h1>카베이라</h1>
-					<br>
-					<h3>인뜨로그레이숀</h3>
 				</div>
 			</div>
 
-			<!-- 게이지1 -->
+			<!-- 게이지 -->
 			<div class="col-sm-4 col-lg-4">
 				<div class="dash-unit">
 					<dtitle>현재 미세먼지</dtitle>
 					<hr>
-					<canvas id="g1" width="280" height="170"></canvas>
-					<script src="http://52.78.166.156:8080/javascripts/gauge/nowfd.js"></script>
-					<h2>222㎍/㎥</h2> 
+					<center><canvas id="g2" width="270px" style="max-width : 100%;"></canvas></center>
+					<script src="http://52.78.166.156:8080/javascripts/gauge/nowfpm.js"></script>
+					<h2 id="nowfpm"></h2>
 				</div>
 			
 			</div>
-
-			<!-- 게이지2 -->
+			
+			<!-- 서버 업타임 -->
 			<div class="col-sm-4 col-lg-4">
 				<div class="dash-unit">
-					<dtitle>현재 초미세먼지</dtitle>
-					<hr>
-					<canvas id="g2" width="280" height="170"></canvas>
-					<script src="http://52.78.166.156:8080/javascripts/gauge/nowfpm.js"></script>
-					<h2>44㎍/㎥</h2> 
-				</div>
-			
-			</div>
-        
-      
-		</div>
-      
-      
-      
-		<!-- 2열 -->     
-		<div class="row">
-	
-			<div class="col-sm-3 col-lg-3">
-
-			  <!-- 현재시간 -->
-				<div class="half-unit">
-					<dtitle>현재 시간</dtitle>
-					<hr>
-					<div class="container-fluid" id="stage">
-					<div id="hms"></div>
-					</div>
-				</div>
-
-				<!-- 서버 업타임 -->
-				<div class="half-unit">
-					<dtitle>업타임</dtitle>
-					<hr>
+					<dtitle>최근 갱신 시간</dtitle>
+					<hr><br><br>
 					<div class="cont">
-						<p><img src="http://52.78.166.156:8080/images/up.png" alt=""> <bold>Upppp</bold> | 333fps.</p>
+						<h2 id="nowfpmDate" ><img src="http://52.78.166.156:8080/images/up.png" alt="up" ></h2>
 					</div>
 				</div>
+			</div>
+			
+		</div>
+		
+		<div class="row">
+			<div class="col-lg-2">
 				
 			</div>
-
-
-			<!-- 차트 -->     
-			<div class="col-sm-3 col-lg-3">
+			
+			<div class="col-lg-4">
 				<div class="dash-unit">
 					<dtitle>기상청</dtitle>
 					<hr>
@@ -163,7 +128,7 @@
 		
 		
 			<!-- 팬 속도 -->     
-			<div class="col-sm-3 col-lg-3">
+			<div class="col-lg-4">
 				<div class="dash-unit">
 					<dtitle>에어 코리아</dtitle>
 					<hr>
@@ -172,47 +137,13 @@
 					</a>
 				</div>
 			</div>
-		
-		
-			<!-- 스위치 -->     
-			<div class="col-sm-3 col-lg-3">
-				<div class="dash-unit">
-					<dtitle>스위치</dtitle>
-					<hr>
-					<div class="info-user">
-						<span aria-hidden="true" class="li_params fs2"></span>
-					</div>
-					<br>
+			
+			<div class="col-lg-2">
 				
-					<div class="switch">
-						<input type="radio" class="switch-input" name="b1" value="on1" id="on1" checked="">
-						<label for="on1" class="switch-label switch-label-off">On</label>
-						<input type="radio" class="switch-input" name="b1" value="off1" id="off1">
-						<label for="off1" class="switch-label switch-label-on">Off</label>
-						<span class="switch-selection"></span>
-					</div>
-				
-					<div class="switch switch-blue">
-						<input type="radio" class="switch-input" name="b2" value="on2" id="on2" checked="">
-						<label for="on2" class="switch-label switch-label-off">On</label>
-						<input type="radio" class="switch-input" name="b2" value="off2" id="off2">
-						<label for="off2" class="switch-label switch-label-on">Off</label>
-						<span class="switch-selection"></span>
-					</div>
-				
-					<div class="switch switch-yellow">
-						<input type="radio" class="switch-input" name="b3" value="on3" id="on3" checked="">
-						<label for="on3" class="switch-label switch-label-off">On</label>
-						<input type="radio" class="switch-input" name="b3" value="off3" id="off3">
-						<label for="off3" class="switch-label switch-label-on">Off</label>
-						<span class="switch-selection"></span>
-					</div>
-				</div>
 			</div>
-
-		</div>    
+		</div>
 	
-		<!-- 3열 -->
+		<!-- 2열 -->
 		<div class="row">
 			<!-- 시간별 미세먼지 그래프 -->
 			<div class="col-sm-12 col-lg-12">
@@ -223,7 +154,7 @@
 			</div>
 		</div>
 	
-		<!-- 4열 -->
+		<!-- 3열 -->
 		<div class="row">
 			<!-- 이번주 미세먼지 그래프 -->
 			<div class="col-sm-12 col-lg-12">
@@ -246,6 +177,7 @@
 						</a>
 						<p style="font-size:24px">gone with the dust</p>
 						<p style="font-size:10px">배재대학교 컴퓨터공학과 최동우 서지민 주장하</p>
+						
 					</div>
 				</div>
 			</div>	

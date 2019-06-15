@@ -1,4 +1,5 @@
-var opts = {
+
+				var opts = {
 				angle: 0.1, 
 				lineWidth: 0.3,
 				radiusScale: 1, 
@@ -26,9 +27,25 @@ var opts = {
 				fractionDigits: 0 
 				},
 				};
-				var target = document.getElementById('g2'); 
-				var gauge = new Gauge(target).setOptions(opts);
-				gauge.maxValue = 150;
-				gauge.setMinValue(0);
-				gauge.animationSpeed = 40;
-				gauge.set(44);
+				
+				
+				var nowfpm = null;
+				var nowfpmDate = null;
+				$.getJSON( "http://52.78.166.156:8080/sensor_json", function( data ) {
+					var n = $(data).length;
+				
+					console.log(data[n-1].data);
+					console.log(data[n-1].date);
+					nowfpm = (data[n-1].data);
+					nowfpmDate = (data[n-1].date);
+					
+					var target = document.getElementById('g2'); 
+					var gauge = new Gauge(target).setOptions(opts);
+					$('#nowfpm').append(nowfpm);
+					$('#nowfpmDate').append(nowfpmDate);
+					
+					gauge.maxValue = 150;
+					gauge.setMinValue(0);
+					gauge.animationSpeed = 40;
+					gauge.set(nowfpm);
+				});
