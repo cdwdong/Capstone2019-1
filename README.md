@@ -14,7 +14,7 @@ IoT기기를 위한 클라우드 기반 실내 환경 관리 플랫폼
 
 # 관련 내용 #
 
-![2019 캡스톤 최종보고서 v3001.jpg](https://meeta.io:3000/api/image/1569150962544.jpeg)
+![2019 캡스톤 최종보고서 v3001.jpg](./mdImage/2019 캡스톤 최종보고서 v3001.jpg)
 ![2019 캡스톤 최종보고서 v3002.jpg](https://meeta.io:3000/api/image/1569150962548.jpeg)
 ![2019 캡스톤 최종보고서 v3003.jpg](https://meeta.io:3000/api/image/1569150962469.jpeg)
 ![2019 캡스톤 최종보고서 v3004.jpg](https://meeta.io:3000/api/image/1569150962550.jpeg)
