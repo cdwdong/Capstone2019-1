@@ -6,7 +6,7 @@ var QUERY_LIMIT = 259200;
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    res.render('index', { title: 'Express'});
+    res.render('index.html');
 });
 
 router.get('/sensor', function(req, res, next) {
